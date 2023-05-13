@@ -50,7 +50,6 @@ public class HuffmanGUI extends Application {
         TextField inputField = new TextField();
         Button inputFileButton = new Button("Wybierz");
 
-// przypisanie akcji do przycisków
         inputFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -81,7 +80,7 @@ public class HuffmanGUI extends Application {
         compressButton.setOnAction(e -> {
             try {
                 String programPath;
-                String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem().toString(); // pobranie wybranego trybu kompresji z ComboBox
+                String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem().toString();
                 String inputFilePath = inputField.getText();
                 String outputFilePath = outputField.getText();
                 String result = Compress.run(inputFilePath, outputFilePath, compressionMode);
@@ -188,7 +187,7 @@ public class HuffmanGUI extends Application {
 // 4 ćwiartka
         StackPane stackPane4 = createStackPane(Color.BLACK);
         GridPane innerGridPane4 = new GridPane();
-        innerGridPane4.setAlignment(Pos.CENTER); // Center align the grid pane
+        innerGridPane4.setAlignment(Pos.CENTER);
         innerGridPane4.add(resultLabel, 1, 1);
         stackPane4.getChildren().add(innerGridPane4);
         root.add(stackPane4, 1, 1);

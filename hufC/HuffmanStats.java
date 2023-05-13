@@ -51,7 +51,7 @@ public class HuffmanStats {
                 freqAllBuilder.append(freq).append("\n ");
             }
             if (freqAllBuilder.length() > 0) {
-                freqAllBuilder.setLength(freqAllBuilder.length() - 2); // usunięcie ostatniego przecinka i spacji
+                freqAllBuilder.setLength(freqAllBuilder.length() - 2);
             }
             freqAll = freqAllBuilder.toString();
         }
