@@ -1,7 +1,6 @@
 package hufC;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class Compress {
@@ -22,7 +21,7 @@ public class Compress {
             return result.toString();
         } else if (compressionMode.equals("huffman v2")) {
             String programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\ich.exe";
-            programPath = "ich.exe";
+            programPath = "huffv2.exe";
             String treeFilePath= "tree.txt";
             String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", treeFilePath, "-c x"};
             Process process = Runtime.getRuntime().exec(command);
