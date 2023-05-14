@@ -7,15 +7,9 @@ import java.util.Map;
 public class Compress {
 
 
-        public static void main(String[] args) throws IOException, InterruptedException {
-            HuffmanGUI huffmanGUI = new HuffmanGUI();
-            String programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\huffman.exe"; // ścieżka do programu w C
-            String inputFilePath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\test.txt";
-            String outputFilePath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\wynik.bin";
-        }
     public static String run(String inputFilePath, String outputFilePath, String compressionMode) throws IOException, InterruptedException {
         if (compressionMode.equals("huffman")) {
-            String programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\huffman.exe";
+            String programPath = "huffman.exe";
             String[] command = {programPath, "-i", inputFilePath, "-o", outputFilePath, "-c"};
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -28,8 +22,8 @@ public class Compress {
             return result.toString();
         } else if (compressionMode.equals("huffman v2")) {
             String programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\ich.exe";
-            programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\ich.exe";
-            String treeFilePath= "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\tree.txt";
+            programPath = "ich.exe";
+            String treeFilePath= "tree.txt";
             String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", treeFilePath, "-c x"};
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
