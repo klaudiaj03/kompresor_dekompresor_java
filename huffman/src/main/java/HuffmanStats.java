@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class HuffmanStats {
-    private Compress compress = new Compress();
+    private HuffmanCompressor compress = new HuffmanCompressor();
     private int frequencyOf0Huffman;
     private int frequencyOf1Huffman;
     private int inputFileSize;

@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.HashMap;
 
 
-public class Compress {
+public class HuffmanCompressor {
 
 
     public static String run(String inputFilePath, String outputFilePath, String compressionMode) throws IOException, InterruptedException {

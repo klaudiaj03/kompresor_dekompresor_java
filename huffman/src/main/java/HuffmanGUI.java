@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,10 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
 
 
 public class HuffmanGUI extends Application {
@@ -68,13 +63,13 @@ public class HuffmanGUI extends Application {
         compressionComboBox = new ComboBox<>();
         compressionComboBox.getItems().addAll(compressionModes);
         compressionComboBox.getSelectionModel().selectFirst();
-        Label resultLabel= new Label();
+        Label resultLabel = new Label();
         compressButton.setOnAction(e -> {
             try {
                 String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem().toString();
                 String inputFilePath = inputField.getText();
                 String outputFilePath = outputField.getText();
-                String result = Compress.run(inputFilePath, outputFilePath, compressionMode);
+                String result = HuffmanCompressor.run(inputFilePath, outputFilePath, compressionMode);
                 resultLabel.setText(result);
             } catch (IOException | InterruptedException ex) {
                 resultLabel.setText("Błąd podczas kompresji: " + ex.getMessage());
@@ -97,13 +92,13 @@ public class HuffmanGUI extends Application {
 
         treeButton = new Button("Wyświetl \n drzewo");
         statystykiButton = new Button("Wyświetl \n statystyki");
-        Label statystyki= new Label("Statystyki");
+        Label statystyki = new Label("Statystyki");
         Label inputFileSize = new Label("Wielkość pliku wejściowego:");
         Label outputFileSize = new Label("Wielkość pliku wyjściowego:");
         Label treeFileSize = new Label("Wielkość pliku z drzewem:");
         Label frequencyOf0 = new Label("Ilość wystąpień 0 w pliku binarnym:");
         Label frequencyOf1 = new Label("Ilość wystąpień 1 w pliku binarnym:");
-        Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku w pliku wejściowym:");
+        Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku \n w pliku wejściowym:");
 
         treeButton.setOnAction(e -> {
             String inputFilePath = "tree.txt";
@@ -136,7 +131,7 @@ public class HuffmanGUI extends Application {
                 treeFileSize.setText("Wielkość pliku z drzewem: " + huffmanStats.getTreeFileSizeHuffman() + "B");
                 frequencyOf0.setText("Ilość wystąpień 0 w pliku binarnym: " + huffmanStats.getFrequencyOf0Huffman());
                 frequencyOf1.setText("Ilość wystąpień 1 w pliku binarnym: " + huffmanStats.getFrequencyOf1Huffman());
-                frequencyOfAll.setText("Ilość wystąpień każdego znaku w pliku wejściowym:\n " + huffmanStats.getFreqAll() );
+                frequencyOfAll.setText("Ilość wystąpień każdego znaku \n w pliku wejściowym:\n " + huffmanStats.getFreqAll());
             } catch (IOException ex) {
                 resultLabel.setText("Błąd podczas wyświetlania statystyk" + ex.getMessage());
             } catch (InterruptedException ex) {
@@ -145,29 +140,28 @@ public class HuffmanGUI extends Application {
         });
 
 
-
         GridPane root = new GridPane();
         root.setPadding(new Insets(20));
-        root.setHgap(20);
-        root.setVgap(20);
+        root.setHgap(10);
+        root.setVgap(10);
 
 // 1 ćwiartka
-        StackPane stackPane1 = createStackPane(Color.BLACK);
+        StackPane stackPane1 = createStackPane(Color.BLACK, 300, 270);
         GridPane innerGridPane1 = new GridPane();
         innerGridPane1.setAlignment(Pos.CENTER);
-        innerGridPane1.setHgap(50);
-        innerGridPane1.setVgap(20);
-        innerGridPane1.setPadding(new Insets(20, 20, 20, 20));
+        innerGridPane1.setHgap(10);
+        innerGridPane1.setVgap(10);
+        innerGridPane1.setPadding(new Insets(1, 10, 1, 10));
         innerGridPane1.add(inputFileLabel, 0, 0);
         innerGridPane1.add(inputField, 1, 0);
         innerGridPane1.add(inputFileButton, 2, 0);
         innerGridPane1.add(outputFileLabel, 0, 1);
         innerGridPane1.add(outputField, 1, 1);
         innerGridPane1.add(outputFileButton, 2, 1);
-        innerGridPane1.add(compressionLabel, 0, 3);
-        innerGridPane1.add(compressionComboBox, 0, 4);
-        innerGridPane1.add(compressButton, 0, 2);
-        innerGridPane1.add(decompressButton, 1, 2);
+        innerGridPane1.add(compressionLabel, 0, 2);
+        innerGridPane1.add(compressionComboBox, 0, 3);
+        innerGridPane1.add(compressButton, 0, 4);
+        innerGridPane1.add(decompressButton, 1, 4);
         innerGridPane1.add(treeButton, 0, 5);
         innerGridPane1.add(statystykiButton, 1, 5);
         stackPane1.getChildren().add(innerGridPane1);
@@ -175,14 +169,14 @@ public class HuffmanGUI extends Application {
 
 
 // 2 ćwiartka
-        StackPane stackPane2 = createStackPane(Color.BLACK);
+        StackPane stackPane2 = createStackPane(Color.BLACK, 300, 310);
         ScrollPane scrollPane = new ScrollPane();
         GridPane innerGridPane2 = new GridPane();
         innerGridPane2.setAlignment(Pos.CENTER_LEFT);
         innerGridPane2.setHgap(10);
-        innerGridPane2.setVgap(20);
+        innerGridPane2.setVgap(10);
         innerGridPane2.setPadding(new Insets(10, 10, 10, 10));
-        innerGridPane2.add(statystyki, 0,0);
+        innerGridPane2.add(statystyki, 0, 0);
         innerGridPane2.add(inputFileSize, 0, 1);
         innerGridPane2.add(outputFileSize, 0, 2);
         innerGridPane2.add(treeFileSize, 0, 3);
@@ -197,59 +191,68 @@ public class HuffmanGUI extends Application {
 
 
 // 3 ćwiartka
-        StackPane stackPane3 = createStackPane(Color.BLACK);
+        StackPane stackPane3 = createStackPane(Color.BLACK, 640, 520);
         GridPane innerGridPane3 = new GridPane();
         root.add(stackPane3, 1, 0);
 
 // 4 ćwiartka
-        StackPane stackPane4 = createStackPane(Color.BLACK);
+        StackPane stackPane4 = createStackPane(Color.BLACK, 640, 120);
+        stackPane4.setPadding(new Insets(0, 0, 10, 0)); // Dodaj padding 10 pikseli od dołu
         GridPane innerGridPane4 = new GridPane();
-        innerGridPane4.setAlignment(Pos.CENTER); // Center align the grid pane
+        innerGridPane4.setAlignment(Pos.CENTER); // Wyśrodkuj GridPane
         innerGridPane4.add(resultLabel, 1, 1);
         stackPane4.getChildren().add(innerGridPane4);
         root.add(stackPane4, 1, 1);
-        root.setAlignment(Pos.CENTER);
-        stackPane4.setAlignment(Pos.CENTER);
 
-        inputFileSize.setFont(new Font("Verdana", 16));
-        outputFileSize.setFont(Font.font("Verdana", 16));
-        treeFileSize.setFont(Font.font("Verdana", 16));
-        frequencyOf0.setFont(Font.font("Verdana", 16));
-        frequencyOf1.setFont(Font.font("Verdana", 16));
-        frequencyOfAll.setFont(Font.font("Verdana", 16));
-        inputFileLabel.setFont(Font.font("Verdana", 16));
-        compressionLabel.setFont(Font.font("Verdana", 16));
-        outputFileLabel.setFont(Font.font("Verdana", 16));
-        resultLabel.setFont(Font.font("Verdana", 16));
-        outputFileButton.setPrefSize(50,50);
-        inputFileButton.setPrefSize(50,50);
-        statystyki.setFont(Font.font("Arial Black",25));
-        resultLabel.setPrefSize(500, 300);
+// Ustawienie nachodzenia siatek
+        GridPane.setConstraints(stackPane1, 0, 0, 1, 6);
+        GridPane.setConstraints(stackPane2, 0, 6, 1, 5);
+        GridPane.setConstraints(stackPane3, 1, 0, 1, 7);
+        GridPane.setConstraints(stackPane4, 1, 8, 1, 3);
+
+
+
+
+        inputFileSize.setFont(new Font("Verdana", 12));
+        outputFileSize.setFont(Font.font("Verdana", 12));
+        treeFileSize.setFont(Font.font("Verdana", 12));
+        frequencyOf0.setFont(Font.font("Verdana", 12));
+        frequencyOf1.setFont(Font.font("Verdana", 12));
+        frequencyOfAll.setFont(Font.font("Verdana", 12));
+        inputFileLabel.setFont(Font.font("Verdana", 15));
+        compressionLabel.setFont(Font.font("Verdana", 12));
+        outputFileLabel.setFont(Font.font("Verdana", 15));
+        resultLabel.setFont(Font.font("Verdana", 12));
+        outputFileButton.setPrefSize(25, 25);
+        inputFileButton.setPrefSize(25, 25);
+        statystyki.setFont(Font.font("Arial Black", 15));
+        resultLabel.setPrefSize(550, 100);
         resultLabel.setWrapText(true);
-        decompressButton.setPrefSize(200,40);
-        compressButton.setPrefSize(200,40);
-        statystykiButton.setPrefSize(200,100);
-        treeButton.setPrefSize(200,100);
-        compressionComboBox.setPrefSize(140,20);
+        decompressButton.setPrefSize(150, 20);
+        compressButton.setPrefSize(150, 20);
+        statystykiButton.setPrefSize(150, 50);
+        treeButton.setPrefSize(150, 50);
+        compressionComboBox.setPrefSize(120, 10);
         decompressButton.setTextFill(Color.RED);
-        decompressButton.setFont(Font.font("Arial Black", 15));
+        decompressButton.setFont(Font.font("Arial Black", 12));
         compressButton.setTextFill(Color.GREEN);
-        compressButton.setFont(Font.font("Arial Black", 15));
-        statystykiButton.setFont(Font.font("Arial Black", 15));
-        treeButton.setFont(Font.font("Arial Black", 15));
+        compressButton.setFont(Font.font("Arial Black", 12));
+        statystykiButton.setFont(Font.font("Arial Black", 13));
+        treeButton.setFont(Font.font("Arial Black", 13));
         Scene scene = new Scene(root);
 
-        primaryStage.setWidth(1400);
+        primaryStage.setWidth(1000);
         primaryStage.setHeight(730);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    private StackPane createStackPane(Color color) {
-        Rectangle border = new Rectangle(650, 325);
+
+    private StackPane createStackPane(Color color, Integer width, Integer hight ) {
+        Rectangle border = new Rectangle(width, hight);
         border.setFill(null);
         border.setStroke(color);
-        border.setStrokeWidth(3);
+        border.setStrokeWidth(1);
         border.setStrokeType(StrokeType.INSIDE);
 
         StackPane stackPane = new StackPane();
