@@ -103,12 +103,13 @@ public class HuffmanGUI extends Application {
         Pane treeView = new Pane();
 
         treeButton.setOnAction(e -> {
-            String inputFilePath = "tree.txt";
+            String treeFilePath = "tree.txt";
             try {
+                String inputFilePath = inputField.getText();
                 HuffmanTree huffmanTree = new HuffmanTree();
-                huffmanTree.buildTreeFromFile(inputFilePath);
+                huffmanTree.buildTreeFromFile(treeFilePath);
                 int depth = huffmanTree.calculateDepth(huffmanTree.getRoot()); // Oblicz liczbę iteracji drzewa
-                huffmanTree.displayTree(huffmanTree.getRoot(), treeView, 0, "", 1365.0, 40.0, 100, depth); // Przekazanie wartości depth
+                huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", 1365.0, 40.0, 100, depth); // Przekazanie wartości depth
             } catch (IOException ex) {
                 resultLabel.setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
             }
