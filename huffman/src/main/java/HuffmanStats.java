@@ -1,10 +1,5 @@
-
-
-import com.sun.source.tree.BreakTree;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class HuffmanStats {
     private Compress compress = new Compress();
