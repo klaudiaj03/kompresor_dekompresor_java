@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/2023L_JIMP2_proj_git_gr1.iml" filepath="$PROJECT_DIR$/.idea/2023L_JIMP2_proj_git_gr1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/huffman/huffman.iml" filepath="$PROJECT_DIR$/huffman/huffman.iml" />
+    </modules>
+  </component>
+</project>

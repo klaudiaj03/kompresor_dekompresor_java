@@ -100,23 +100,15 @@ public class HuffmanGUI extends Application {
         Label frequencyOf1 = new Label("Ilość wystąpień 1 w pliku binarnym:");
         Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku \n w pliku wejściowym:");
 
+        Pane treeView = new Pane();
+
         treeButton.setOnAction(e -> {
             String inputFilePath = "tree.txt";
             try {
                 HuffmanTree huffmanTree = new HuffmanTree();
                 huffmanTree.buildTreeFromFile(inputFilePath);
-
-                Pane treeView = new Pane();
-                huffmanTree.displayTree(huffmanTree.getRoot(), treeView, 0, "", 400.0, 20.0);
-
-                Stage treeStage = new Stage();
-                treeStage.setTitle("Drzewo Huffmana");
-                ScrollPane scrollPane = new ScrollPane(treeView);
-                scrollPane.setFitToWidth(true);
-
-                Scene treeScene = new Scene(scrollPane, 800, 600);
-                treeStage.setScene(treeScene);
-                treeStage.show();
+                int depth = huffmanTree.calculateDepth(huffmanTree.getRoot()); // Oblicz liczbę iteracji drzewa
+                huffmanTree.displayTree(huffmanTree.getRoot(), treeView, 0, "", 1365.0, 40.0, 100, depth); // Przekazanie wartości depth
             } catch (IOException ex) {
                 resultLabel.setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
             }
@@ -193,6 +185,13 @@ public class HuffmanGUI extends Application {
 // 3 ćwiartka
         StackPane stackPane3 = createStackPane(Color.BLACK, 640, 520);
         GridPane innerGridPane3 = new GridPane();
+        ScrollPane scrollPane3 = new ScrollPane();
+        innerGridPane3.add(treeView, 0, 1);
+        scrollPane3.setContent(innerGridPane3);
+        innerGridPane3.setAlignment(Pos.TOP_RIGHT); // Ustawienie pozycji w prawym górnym rogu
+        scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        stackPane3.getChildren().add(scrollPane3);
         root.add(stackPane3, 1, 0);
 
 // 4 ćwiartka
