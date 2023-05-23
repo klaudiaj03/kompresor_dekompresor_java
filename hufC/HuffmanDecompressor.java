@@ -5,13 +5,6 @@ import java.util.Map;
 
 public class HuffmanDecompressor {
 
-    public static void main(String[] args) {
-        Map<String, Character> asciiMap = getAsciiMap("tree.txt");
-        String input = "wynikC.bin";
-        String output = "wynikD.txt";
-        decompress(input, output, asciiMap);
-    }
-
     public static Map<String, Character> getAsciiMap(String fileName) {
         Map<String, Character> asciiMap = new HashMap<>();
         try (BufferedReader buffer = new BufferedReader(new FileReader(fileName))) {
@@ -29,7 +22,8 @@ public class HuffmanDecompressor {
         return asciiMap;
     }
 
-    public static void decompress(String inputFilename, String outputFilename, Map<String, Character> asciiMap) {
+    public static void decompress(String inputFilename, String outputFilename) {
+        Map<String, Character> asciiMap = getAsciiMap("tree.txt");
         try (DataInputStream inputFile = new DataInputStream(new FileInputStream(new File(inputFilename)));
              BufferedWriter outputFile = new BufferedWriter(new FileWriter(outputFilename))) {
 
@@ -73,6 +67,4 @@ public class HuffmanDecompressor {
             e.printStackTrace();
         }
     }
-
 }
-

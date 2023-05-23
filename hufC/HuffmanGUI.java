@@ -1,20 +1,29 @@
 package hufC;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
-
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 
 public class HuffmanGUI extends Application {
@@ -23,25 +32,12 @@ public class HuffmanGUI extends Application {
     private ComboBox<String> compressionComboBox;
     private Button compressButton, decompressButton, treeButton, statystykiButton;
 
-    public TextField getInputField(){
-        return inputField;
-    }
-
-    public void setInputField(TextField inputField) {
-        this.inputField = inputField;
-    }
-
-    public TextField getOutputField(){
-        return outputField;
-    }
-
-    public void setOutputField(TextField outputField) {
-        this.outputField = outputField;
-    }
     HuffmanStats huffmanStats = new HuffmanStats();
+
 
     @Override
     public void start(Stage primaryStage) {
+
 
         // ustawienia okna
         primaryStage.setTitle("Program Huffman");
@@ -50,6 +46,7 @@ public class HuffmanGUI extends Application {
         TextField inputField = new TextField();
         Button inputFileButton = new Button("Wybierz");
 
+// przypisanie akcji do przycisków
         inputFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -79,7 +76,6 @@ public class HuffmanGUI extends Application {
         Label resultLabel= new Label();
         compressButton.setOnAction(e -> {
             try {
-                String programPath;
                 String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem().toString();
                 String inputFilePath = inputField.getText();
                 String outputFilePath = outputField.getText();
@@ -92,11 +88,18 @@ public class HuffmanGUI extends Application {
             }
         });
 
-
-        //     decompressButton.setOnAction(e -> {
-   //         // kod obsługujący dekompresję
-
         decompressButton = new Button("Dekompresuj");
+        decompressButton.setOnAction(e -> {
+            try {
+                String inputFilePath = inputField.getText();
+                String outputFilePath = outputField.getText();
+                HuffmanDecompressor.decompress(inputFilePath, outputFilePath);
+                resultLabel.setText("Dekompresja zakończona.");
+            } catch (IllegalArgumentException ex) {
+                resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
+            }
+        });
+
         treeButton = new Button("Wyświetl \n drzewo");
         statystykiButton = new Button("Wyświetl \n statystyki");
         Label statystyki= new Label("Statystyki");
@@ -107,8 +110,27 @@ public class HuffmanGUI extends Application {
         Label frequencyOf1 = new Label("Ilość wystąpień 1 w pliku binarnym:");
         Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku w pliku wejściowym:");
 
-        // treeButton.setOnAction(e -> {
-// kod obsługujący wyświetlanie drzewa
+        treeButton.setOnAction(e -> {
+            String inputFilePath = "tree.txt";
+            try {
+                HuffmanTree huffmanTree = new HuffmanTree();
+                huffmanTree.buildTreeFromFile(inputFilePath);
+
+                Pane treeView = new Pane();
+                huffmanTree.displayTree(huffmanTree.getRoot(), treeView, 0, "", 400.0, 20.0);
+
+                Stage treeStage = new Stage();
+                treeStage.setTitle("Drzewo Huffmana");
+                ScrollPane scrollPane = new ScrollPane(treeView);
+                scrollPane.setFitToWidth(true);
+
+                Scene treeScene = new Scene(scrollPane, 800, 600);
+                treeStage.setScene(treeScene);
+                treeStage.show();
+            } catch (IOException ex) {
+                resultLabel.setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
+            }
+        });
 
         statystykiButton.setOnAction(e -> {
             String inputFile = inputField.getText();
@@ -187,7 +209,7 @@ public class HuffmanGUI extends Application {
 // 4 ćwiartka
         StackPane stackPane4 = createStackPane(Color.BLACK);
         GridPane innerGridPane4 = new GridPane();
-        innerGridPane4.setAlignment(Pos.CENTER);
+        innerGridPane4.setAlignment(Pos.CENTER); // Center align the grid pane
         innerGridPane4.add(resultLabel, 1, 1);
         stackPane4.getChildren().add(innerGridPane4);
         root.add(stackPane4, 1, 1);
