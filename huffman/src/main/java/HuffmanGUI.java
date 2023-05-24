@@ -131,19 +131,8 @@ public class HuffmanGUI extends Application {
                     HuffmanTree huffmanTree = new HuffmanTree();
                     huffmanTree.buildTreeFromFile(treeFilePath);
                     int depth = huffmanTree.calculateDepth(huffmanTree.getRoot());
-                    double treeWidth = 320.0;
-                    double x = treeWidth / 2;
 
-                    // Oblicz szerokość drzewa w pikselach na podstawie głębokości
-                    double treePixelWidth = depth * 100.0;
-
-                    // Sprawdź, czy szerokość drzewa nie przekracza szerokości ekranu
-                    double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-                    if (treePixelWidth > screenWidth) {
-                        treePixelWidth = screenWidth;
-                    }
-
-                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", treePixelWidth, 80.0, 100, depth, new HashMap<>());
+                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", 1300, 80.0, 100, depth, new HashMap<>());
                     Platform.runLater(() -> {
                         saveImageButton.setDisable(false);
                         treeButton.setDisable(false);

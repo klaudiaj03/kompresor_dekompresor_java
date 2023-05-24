@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -112,20 +113,16 @@ public class HuffmanTree {
         Circle circle = new Circle(x, y, circleRadius, Color.WHITE);
         circle.setStroke(Color.BLACK);
 
-        // Update UI components on the JavaFX application thread
-        Platform.runLater(() -> {
-            parent.getChildren().addAll(circle, charFrequencyText);
-        });
+        List<Node> nodesToAdd = new ArrayList<>();
+        nodesToAdd.add(circle);
+        nodesToAdd.add(charFrequencyText);
 
         if (node.getLeft() != null) {
             Line leftLine = new Line(x, y + circleRadius, childX1, childY - circleRadius);
             Text leftCodeText = new Text(x - circleRadius / 2, y + circleRadius + 30, "0");
             leftCodeText.setStyle("-fx-font-family: monospace");
-
-            // Update UI components on the JavaFX application thread
-            Platform.runLater(() -> {
-                parent.getChildren().addAll(leftLine, leftCodeText);
-            });
+            nodesToAdd.add(leftLine);
+            nodesToAdd.add(leftCodeText);
 
             displayTree(inputFilePath, node.getLeft(), parent, 0, code + "0", childX1, childY, verticalOffset + verticalGap, depth + 1, frequencyMap);
         }
@@ -134,16 +131,16 @@ public class HuffmanTree {
             Line rightLine = new Line(x, y + circleRadius, childX2, childY - circleRadius);
             Text rightCodeText = new Text(x + circleRadius / 2, y + circleRadius + 30, "1");
             rightCodeText.setStyle("-fx-font-family: monospace");
-
-            // Update UI components on the JavaFX application thread
-            Platform.runLater(() -> {
-                parent.getChildren().addAll(rightLine, rightCodeText);
-            });
+            nodesToAdd.add(rightLine);
+            nodesToAdd.add(rightCodeText);
 
             displayTree(inputFilePath, node.getRight(), parent, 1, code + "1", childX2, childY, verticalOffset + verticalGap, depth + 1, frequencyMap);
         }
-    }
 
+        Platform.runLater(() -> {
+            parent.getChildren().addAll(nodesToAdd);
+        });
+    }
 }
 
 class HuffmanNode {
