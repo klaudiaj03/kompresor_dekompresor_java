@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -10,14 +11,15 @@ import java.util.*;
 
 public class HuffmanTree {
 
-    HuffmanCompressor compress= new HuffmanCompressor();
+    private HuffmanCompressor compress = new HuffmanCompressor();
     private HuffmanNode root;
-    Pane treeViewPane = new Pane();
-
-
+    private Pane treeViewPane = new Pane();
+    private HashMap<Integer, Integer> frequencyMap;
 
     public void buildTreeFromFile(String filePath) throws IOException {
         Map<Integer, String> codeMap = new HashMap<>();
+        frequencyMap = compress.getFrequencyMap(filePath);
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -32,7 +34,6 @@ public class HuffmanTree {
                     if (!parts[1].isEmpty()) {
                         code = parts[1];
                     }
-
 
                     codeMap.put(asciiCode, code);
                 }
@@ -62,18 +63,6 @@ public class HuffmanTree {
         return priorityQueue.poll();
     }
 
-    public HuffmanNode getRoot() {
-        return root;
-    }
-
-    public int calculateDepth(HuffmanNode node) {
-        if (node == null) {
-            return 0;
-        }
-        int leftDepth = calculateDepth(node.getLeft());
-        int rightDepth = calculateDepth(node.getRight());
-        return Math.max(leftDepth, rightDepth) +1;
-    }
     public int calculateChildFrequency(String inputFilePath, HuffmanNode node) throws IOException {
         if (node == null) {
             return 0;
@@ -88,7 +77,20 @@ public class HuffmanTree {
         return leftFrequency + rightFrequency + nodeFrequency;
     }
 
-    public void displayTree(String inputFilePath, HuffmanNode node, Pane parent, int direction, String code, double x, double y, double verticalOffset, int depth) throws IOException {
+    public HuffmanNode getRoot() {
+        return root;
+    }
+
+    public int calculateDepth(HuffmanNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int leftDepth = calculateDepth(node.getLeft());
+        int rightDepth = calculateDepth(node.getRight());
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+
+    public void displayTree(String inputFilePath, HuffmanNode node, Pane parent, int direction, String code, double x, double y, double verticalOffset, int depth, HashMap<Integer, Integer> frequencyMap) throws IOException {
         if (node == null) {
             return;
         }
@@ -102,49 +104,47 @@ public class HuffmanTree {
         double childX2 = x + (horizontalGap * depthPow) - (circleRadius / 2);
         double childY = y + verticalGap + verticalOffset;
 
-        try {
-            HashMap<Integer, Integer> frequencyMap = compress.getFrequencyMap(inputFilePath);
-            for (int key : frequencyMap.keySet()) {
-                if ((char) node.getAsciiCode() == key) {
-                    Text charFrequencyText = new Text(x - circleRadius / 2, y + 5, String.valueOf((char) key) + ":" + frequencyMap.get(key));
-                    charFrequencyText.setStyle("-fx-font-family: monospace");
-                    Circle circle = new Circle(x, y, circleRadius, Color.WHITE);
-                    circle.setStroke(Color.BLACK);
-                    parent.getChildren().addAll(circle, charFrequencyText);
-                    break;
-                } else {
-                    int freq = calculateChildFrequency(inputFilePath, node);
-                    Text charFrequencyText = new Text(x - circleRadius / 2, y + 5, String.valueOf(freq));
-                    charFrequencyText.setStyle("-fx-font-family: monospace");
-                    Circle circle = new Circle(x, y, circleRadius, Color.WHITE);
-                    circle.setStroke(Color.BLACK);
-                    parent.getChildren().addAll(circle, charFrequencyText);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        int freq = calculateChildFrequency(inputFilePath, node);
+        String charText = String.format("%c: %d", node.getAsciiCode(), freq);
+        Text charFrequencyText = new Text(x - circleRadius + 5, y, charText);
+        charFrequencyText.setStyle("-fx-font-family: monospace");
+
+        Circle circle = new Circle(x, y, circleRadius, Color.WHITE);
+        circle.setStroke(Color.BLACK);
+
+        // Update UI components on the JavaFX application thread
+        Platform.runLater(() -> {
+            parent.getChildren().addAll(circle, charFrequencyText);
+        });
 
         if (node.getLeft() != null) {
             Line leftLine = new Line(x, y + circleRadius, childX1, childY - circleRadius);
-            Text leftCodeText = new Text(x - circleRadius / 2, y + circleRadius + 15, "0");
+            Text leftCodeText = new Text(x - circleRadius / 2, y + circleRadius + 30, "0");
             leftCodeText.setStyle("-fx-font-family: monospace");
-            parent.getChildren().addAll(leftLine, leftCodeText);
-            displayTree(inputFilePath, node.getLeft(), parent, 0, code + "0", childX1, childY, verticalOffset + verticalGap, depth + 1);
+
+            // Update UI components on the JavaFX application thread
+            Platform.runLater(() -> {
+                parent.getChildren().addAll(leftLine, leftCodeText);
+            });
+
+            displayTree(inputFilePath, node.getLeft(), parent, 0, code + "0", childX1, childY, verticalOffset + verticalGap, depth + 1, frequencyMap);
         }
 
         if (node.getRight() != null) {
             Line rightLine = new Line(x, y + circleRadius, childX2, childY - circleRadius);
-            Text rightCodeText = new Text(x + circleRadius / 2, y + circleRadius + 15, "1");
+            Text rightCodeText = new Text(x + circleRadius / 2, y + circleRadius + 30, "1");
             rightCodeText.setStyle("-fx-font-family: monospace");
-            parent.getChildren().addAll(rightLine, rightCodeText);
-            displayTree(inputFilePath, node.getRight(), parent, 1, code + "1", childX2, childY, verticalOffset + verticalGap, depth + 1);
+
+            // Update UI components on the JavaFX application thread
+            Platform.runLater(() -> {
+                parent.getChildren().addAll(rightLine, rightCodeText);
+            });
+
+            displayTree(inputFilePath, node.getRight(), parent, 1, code + "1", childX2, childY, verticalOffset + verticalGap, depth + 1, frequencyMap);
         }
     }
 
-
 }
-
 
 class HuffmanNode {
     private int asciiCode;
@@ -179,6 +179,4 @@ class HuffmanNode {
     public HuffmanNode getRight() {
         return right;
     }
-
-
 }

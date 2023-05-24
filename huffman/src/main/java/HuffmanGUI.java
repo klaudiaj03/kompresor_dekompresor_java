@@ -1,16 +1,23 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -108,38 +115,71 @@ public class HuffmanGUI extends Application {
         Label frequencyOf1 = new Label("Ilość wystąpień 1 w pliku binarnym:");
         Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku \n w pliku wejściowym:");
 
-        Pane treeView= new Pane();
-        saveImageButton= new Button("Zapisz obraz");
+        Pane treeView = new Pane();
+        Button saveImageButton = new Button("Zapisz obraz");
         saveImageButton.setDisable(true);
+
         treeButton.setOnAction(e -> {
             String treeFilePath = "tree.txt";
-            try {
-                String inputFilePath = inputField.getText();
-                HuffmanTree huffmanTree = new HuffmanTree();
-                huffmanTree.buildTreeFromFile(treeFilePath);
-                int depth = huffmanTree.calculateDepth(huffmanTree.getRoot()); // Oblicz liczbę iteracji drzewa
-                huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", 1365.0, 40.0, 100, depth); // Przekazanie wartości depth
-                saveImageButton.setDisable(false); // Włącz przycisk zapisu obrazu po wyświetleniu drzewa
-            } catch (IOException ex) {
-                resultLabel.setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
-            }
+            String inputFilePath = inputField.getText();
+
+            treeButton.setDisable(true);
+            saveImageButton.setDisable(true);
+
+            Thread thread = new Thread(() -> {
+                try {
+                    HuffmanTree huffmanTree = new HuffmanTree();
+                    huffmanTree.buildTreeFromFile(treeFilePath);
+                    int depth = huffmanTree.calculateDepth(huffmanTree.getRoot());
+                    double treeWidth = 320.0;
+                    double x = treeWidth / 2;
+
+                    // Oblicz szerokość drzewa w pikselach na podstawie głębokości
+                    double treePixelWidth = depth * 100.0;
+
+                    // Sprawdź, czy szerokość drzewa nie przekracza szerokości ekranu
+                    double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+                    if (treePixelWidth > screenWidth) {
+                        treePixelWidth = screenWidth;
+                    }
+
+                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", treePixelWidth, 80.0, 100, depth, new HashMap<>());
+                    Platform.runLater(() -> {
+                        saveImageButton.setDisable(false);
+                        treeButton.setDisable(false);
+                    });
+                } catch (IOException ex) {
+                    Platform.runLater(() -> {
+                        resultLabel.setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
+                        treeButton.setDisable(false);
+                    });
+                }
+            });
+            thread.start();
         });
+
 
         saveImageButton.setOnAction(e -> {
             try {
                 WritableImage snapshot = treeView.snapshot(new SnapshotParameters(), null);
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Zapisz obraz");
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Obrazy JPEG", "*.jpg"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Obrazy JPEG", "*.jpeg", "*.jpg"));
                 File outputFile = fileChooser.showSaveDialog(treeButton.getScene().getWindow());
                 if (outputFile != null) {
-                    ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "jpg", outputFile);
+                    BufferedImage bufferedImage = new BufferedImage((int) snapshot.getWidth(), (int) snapshot.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    PixelReader pixelReader = snapshot.getPixelReader();
+                    for (int x = 0; x < snapshot.getWidth(); x++) {
+                        for (int y = 0; y < snapshot.getHeight(); y++) {
+                            bufferedImage.setRGB(x, y, pixelReader.getArgb(x, y));
+                        }
+                    }
+                    ImageIO.write(bufferedImage, "jpeg", outputFile);
                 }
             } catch (IOException ex) {
                 resultLabel.setText("Błąd podczas zapisu obrazu: " + ex.getMessage());
             }
         });
-
         statystykiButton.setOnAction(e -> {
             String inputFile = inputField.getText();
             try {
@@ -215,7 +255,7 @@ public class HuffmanGUI extends Application {
         innerGridPane3.add(treeView, 0, 1);
         innerGridPane3.add(saveImageButton, 2, 0);
         scrollPane3.setContent(innerGridPane3);
-        innerGridPane3.setAlignment(Pos.TOP_RIGHT); // Ustawienie pozycji w prawym górnym rogu
+        innerGridPane3.setAlignment(Pos.CENTER);
         scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         stackPane3.getChildren().add(scrollPane3);
