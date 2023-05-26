@@ -1,12 +1,16 @@
 import java.io.*;
 import java.util.HashMap;
-
+import java.util.Map;
 
 public class HuffmanCompressor {
 
+    interface CompressionStrategy {
+        String compress(String inputFilePath, String outputFilePath) throws IOException, InterruptedException;
+    }
 
-    public static String run(String inputFilePath, String outputFilePath, String compressionMode) throws IOException, InterruptedException {
-        if (compressionMode.equals("huffman")) {
+    static class HuffmanCompressionStrategy implements CompressionStrategy {
+        @Override
+        public String compress(String inputFilePath, String outputFilePath) throws IOException, InterruptedException {
             String programPath = "huffman.exe";
             String[] command = {programPath, "-i", inputFilePath, "-o", outputFilePath, "-c"};
             Process process = Runtime.getRuntime().exec(command);
@@ -18,9 +22,13 @@ public class HuffmanCompressor {
             }
             process.waitFor();
             return result.toString();
-        } else if (compressionMode.equals("huffman v2")) {
-            String programPath = "C:\\Users\\Klaudia\\Desktop\\huffman\\testy\\kod\\untitled1\\src\\hufC\\ich.exe";
-            programPath = "huffv2.exe";
+        }
+    }
+
+    static class HuffmanV2CompressionStrategy implements CompressionStrategy {
+        @Override
+        public String compress(String inputFilePath, String outputFilePath) throws IOException, InterruptedException {
+            String programPath = "huffv2.exe";
             String treeFilePath= "tree.txt";
             String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", treeFilePath, "-c x"};
             Process process = Runtime.getRuntime().exec(command);
@@ -32,26 +40,22 @@ public class HuffmanCompressor {
             }
             process.waitFor();
             return result.toString();
+        }
+    }
+
+    public static String run(String inputFilePath, String outputFilePath, String compressionMode) throws IOException, InterruptedException {
+        CompressionStrategy strategy = getCompressionStrategy(compressionMode);
+        if (strategy != null) {
+            return strategy.compress(inputFilePath, outputFilePath);
         } else {
             throw new IllegalArgumentException("Nieznany tryb kompresji: " + compressionMode);
         }
     }
 
-    public static HashMap<Integer, Integer> getFrequencyMap(String inputFilePath) throws IOException {
-        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath))) {
-            int c;
-            while ((c = reader.read()) != -1) {
-                Integer character = c;
-                frequencyMap.put(character, frequencyMap.getOrDefault(character, 0) + 1);
-            }
-        }
-        return frequencyMap;
+    private static CompressionStrategy getCompressionStrategy(String compressionMode) {
+        Map<String, CompressionStrategy> strategies = new HashMap<>();
+        strategies.put("huffman", new HuffmanCompressionStrategy());
+        strategies.put("huffman v2", new HuffmanV2CompressionStrategy());
+        return strategies.get(compressionMode);
     }
-
-    public static int getFileSize(String filePath) {
-        File file = new File(filePath);
-        return (int) file.length();
-    }
-
 }

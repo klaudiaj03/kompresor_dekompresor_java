@@ -1,29 +1,11 @@
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HuffmanDecompressor {
 
-    public static Map<String, Character> getAsciiMap(String fileName) {
-        Map<String, Character> asciiMap = new HashMap<>();
-        try (BufferedReader buffer = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = buffer.readLine()) != null) {
-                String[] parts = line.split(" ");
-                int asciiCode = Integer.parseInt(parts[0]);
-                String binaryCode = parts[1];
-                char asciiChar = (char) asciiCode;
-                asciiMap.put(binaryCode, asciiChar);
-            }
-        } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
-        }
-        return asciiMap;
-    }
-
-    public static void decompress(String inputFilename, String outputFilename) {
-        Map<String, Character> asciiMap = getAsciiMap("tree.txt");
-        try (DataInputStream inputFile = new DataInputStream(new FileInputStream(new File(inputFilename)));
+    public static void decompress(String inputFilename, String outputFilename) throws IOException {
+        Map<String, Character> asciiMap = AsciiMapBuilder.getAsciiMap("tree.txt");
+        try (DataInputStream inputFile = new DataInputStream(new FileInputStream(inputFilename));
              BufferedWriter outputFile = new BufferedWriter(new FileWriter(outputFilename))) {
 
             int cut = inputFile.read();
@@ -66,4 +48,17 @@ public class HuffmanDecompressor {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        String inputFilename = "x.bin";
+        String outputFilename = "hh.txt";
+
+        try {
+            HuffmanDecompressor.decompress(inputFilename, outputFilename);
+            System.out.println("Decompression completed successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,21 +9,17 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.transform.Scale;
 
 import javax.imageio.ImageIO;
 import javafx.scene.SnapshotParameters;
@@ -33,9 +28,9 @@ import javafx.scene.SnapshotParameters;
 
 public class HuffmanGUI extends Application {
 
-    private TextField inputField, outputField;
+    private TextField outputField;
     private ComboBox<String> compressionComboBox;
-    private Button compressButton, decompressButton, treeButton, statystykiButton, saveImageButton;
+    private Button compressButton, decompressButton, treeButton, statystykiButton;
 
     HuffmanStats huffmanStats = new HuffmanStats();
 
@@ -81,14 +76,12 @@ public class HuffmanGUI extends Application {
         Label resultLabel = new Label();
         compressButton.setOnAction(e -> {
             try {
-                String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem().toString();
+                String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem();
                 String inputFilePath = inputField.getText();
                 String outputFilePath = outputField.getText();
                 String result = HuffmanCompressor.run(inputFilePath, outputFilePath, compressionMode);
                 resultLabel.setText(result);
-            } catch (IOException | InterruptedException ex) {
-                resultLabel.setText("Błąd podczas kompresji: " + ex.getMessage());
-            } catch (IllegalArgumentException ex) {
+            } catch (IOException | IllegalArgumentException | InterruptedException ex) {
                 resultLabel.setText("Błąd podczas kompresji: " + ex.getMessage());
             }
         });
@@ -102,6 +95,8 @@ public class HuffmanGUI extends Application {
                 resultLabel.setText("Dekompresja zakończona.");
             } catch (IllegalArgumentException ex) {
                 resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -130,9 +125,8 @@ public class HuffmanGUI extends Application {
                 try {
                     HuffmanTree huffmanTree = new HuffmanTree();
                     huffmanTree.buildTreeFromFile(treeFilePath);
-                    int depth = huffmanTree.calculateDepth(huffmanTree.getRoot());
 
-                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 0, "", 1300, 80.0, 100, depth, new HashMap<>());
+                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 200, 80.0, 100);
                     Platform.runLater(() -> {
                         saveImageButton.setDisable(false);
                         treeButton.setDisable(false);
@@ -179,9 +173,7 @@ public class HuffmanGUI extends Application {
                 frequencyOf0.setText("Ilość wystąpień 0 w pliku binarnym: " + huffmanStats.getFrequencyOf0Huffman());
                 frequencyOf1.setText("Ilość wystąpień 1 w pliku binarnym: " + huffmanStats.getFrequencyOf1Huffman());
                 frequencyOfAll.setText("Ilość wystąpień każdego znaku \n w pliku wejściowym:\n " + huffmanStats.getFreqAll());
-            } catch (IOException ex) {
-                resultLabel.setText("Błąd podczas wyświetlania statystyk" + ex.getMessage());
-            } catch (InterruptedException ex) {
+            } catch (IOException | InterruptedException ex) {
                 resultLabel.setText("Błąd podczas wyświetlania statystyk" + ex.getMessage());
             }
         });
@@ -193,7 +185,7 @@ public class HuffmanGUI extends Application {
         root.setVgap(10);
 
 // 1 ćwiartka
-        StackPane stackPane1 = createStackPane(Color.BLACK, 300, 270);
+        StackPane stackPane1 = createStackPane(300, 270);
         GridPane innerGridPane1 = new GridPane();
         innerGridPane1.setAlignment(Pos.CENTER);
         innerGridPane1.setHgap(10);
@@ -216,7 +208,7 @@ public class HuffmanGUI extends Application {
 
 
 // 2 ćwiartka
-        StackPane stackPane2 = createStackPane(Color.BLACK, 300, 310);
+        StackPane stackPane2 = createStackPane(300, 310);
         ScrollPane scrollPane = new ScrollPane();
         GridPane innerGridPane2 = new GridPane();
         innerGridPane2.setAlignment(Pos.CENTER_LEFT);
@@ -238,7 +230,7 @@ public class HuffmanGUI extends Application {
 
 
 // 3 ćwiartka
-        StackPane stackPane3 = createStackPane(Color.BLACK, 640, 520);
+        StackPane stackPane3 = createStackPane(640, 520);
         GridPane innerGridPane3 = new GridPane();
         ScrollPane scrollPane3 = new ScrollPane();
         innerGridPane3.add(treeView, 0, 1);
@@ -251,7 +243,7 @@ public class HuffmanGUI extends Application {
         root.add(stackPane3, 1, 0);
 
 // 4 ćwiartka
-        StackPane stackPane4 = createStackPane(Color.BLACK, 640, 120);
+        StackPane stackPane4 = createStackPane( 640, 120);
         stackPane4.setPadding(new Insets(0, 0, 10, 0)); // Dodaj padding 10 pikseli od dołu
         GridPane innerGridPane4 = new GridPane();
         innerGridPane4.setAlignment(Pos.CENTER); // Wyśrodkuj GridPane
@@ -303,10 +295,10 @@ public class HuffmanGUI extends Application {
         primaryStage.show();
     }
 
-    private StackPane createStackPane(Color color, Integer width, Integer hight ) {
+    private StackPane createStackPane(Integer width, Integer hight ) {
         Rectangle border = new Rectangle(width, hight);
         border.setFill(null);
-        border.setStroke(color);
+        border.setStroke(Color.BLACK);
         border.setStrokeWidth(1);
         border.setStrokeType(StrokeType.INSIDE);
 
