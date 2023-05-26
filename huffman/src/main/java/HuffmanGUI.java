@@ -29,7 +29,7 @@ import javafx.scene.SnapshotParameters;
 public class HuffmanGUI extends Application {
 
     private TextField outputField;
-    private ComboBox<String> compressionComboBox;
+    private ComboBox<String> modeComboBox;
     private Button compressButton, decompressButton, treeButton, statystykiButton;
 
     HuffmanStats huffmanStats = new HuffmanStats();
@@ -69,17 +69,17 @@ public class HuffmanGUI extends Application {
         });
         compressButton = new Button("Kompresuj");
         Label compressionLabel = new Label("Tryb:");
-        String[] compressionModes = {"huffman", "huffman v2"};
-        compressionComboBox = new ComboBox<>();
-        compressionComboBox.getItems().addAll(compressionModes);
-        compressionComboBox.getSelectionModel().selectFirst();
+        String[] Modes = {"huffman", "huffman v2"};
+        modeComboBox = new ComboBox<>();
+        modeComboBox.getItems().addAll(Modes);
+        modeComboBox.getSelectionModel().selectFirst();
         Label resultLabel = new Label();
         compressButton.setOnAction(e -> {
             try {
-                String compressionMode = compressionComboBox.getSelectionModel().getSelectedItem();
+                String compressionMode = modeComboBox.getSelectionModel().getSelectedItem();
                 String inputFilePath = inputField.getText();
                 String outputFilePath = outputField.getText();
-                String result = HuffmanCompressor.run(inputFilePath, outputFilePath, compressionMode);
+                String result = HuffmanCompressor.runC(inputFilePath, outputFilePath, compressionMode);
                 resultLabel.setText(result);
             } catch (IOException | IllegalArgumentException | InterruptedException ex) {
                 resultLabel.setText("Błąd podczas kompresji: " + ex.getMessage());
@@ -89,26 +89,24 @@ public class HuffmanGUI extends Application {
         decompressButton = new Button("Dekompresuj");
         decompressButton.setOnAction(e -> {
             try {
-                String inputFilePath = inputField.getText();
-                String outputFilePath = outputField.getText();
-                HuffmanDecompressor.decompress(inputFilePath, outputFilePath);
-                resultLabel.setText("Dekompresja zakończona.");
-            } catch (IllegalArgumentException ex) {
-                resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+                    String decompressionMode = modeComboBox.getSelectionModel().getSelectedItem();
+                    String inputFilePath = inputField.getText();
+                    String outputFilePath = outputField.getText();
+                    HuffmanDecompressor.runD(inputFilePath, outputFilePath, decompressionMode);
+                } catch (IOException | IllegalArgumentException | InterruptedException ex) {
+                    resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
+                }
+            });
 
         treeButton = new Button("Wyświetl \n drzewo");
         statystykiButton = new Button("Wyświetl \n statystyki");
         Label statystyki = new Label("Statystyki");
-        Label inputFileSize = new Label("Wielkość pliku wejściowego:");
-        Label outputFileSize = new Label("Wielkość pliku wyjściowego:");
-        Label treeFileSize = new Label("Wielkość pliku z drzewem:");
-        Label frequencyOf0 = new Label("Ilość wystąpień 0 w pliku binarnym:");
-        Label frequencyOf1 = new Label("Ilość wystąpień 1 w pliku binarnym:");
-        Label frequencyOfAll = new Label("Ilość wystąpień każdego znaku \n w pliku wejściowym:");
+        Label inputFileSize = new Label();
+        Label outputFileSize = new Label();
+        Label treeFileSize = new Label();
+        Label frequencyOf0 = new Label();
+        Label frequencyOf1 = new Label();
+        Label frequencyOfAll = new Label();
 
         Pane treeView = new Pane();
         Button saveImageButton = new Button("Zapisz obraz");
@@ -126,7 +124,7 @@ public class HuffmanGUI extends Application {
                     HuffmanTree huffmanTree = new HuffmanTree();
                     huffmanTree.buildTreeFromFile(treeFilePath);
 
-                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 200, 80.0, 100);
+                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 500, 80.0, 100);
                     Platform.runLater(() -> {
                         saveImageButton.setDisable(false);
                         treeButton.setDisable(false);
@@ -166,7 +164,8 @@ public class HuffmanGUI extends Application {
         statystykiButton.setOnAction(e -> {
             String inputFile = inputField.getText();
             try {
-                huffmanStats.generateStats(inputFile);
+                String Mode = modeComboBox.getSelectionModel().getSelectedItem();
+                huffmanStats.generateStats(inputFile, Mode);
                 inputFileSize.setText("Wielkość pliku wejściowego: " + huffmanStats.getInputFileSize() + "B");
                 outputFileSize.setText("Wielkość pliku wyjściowego: " + huffmanStats.getOutputFileSize() + "B");
                 treeFileSize.setText("Wielkość pliku z drzewem: " + huffmanStats.getTreeFileSizeHuffman() + "B");
@@ -174,7 +173,7 @@ public class HuffmanGUI extends Application {
                 frequencyOf1.setText("Ilość wystąpień 1 w pliku binarnym: " + huffmanStats.getFrequencyOf1Huffman());
                 frequencyOfAll.setText("Ilość wystąpień każdego znaku \n w pliku wejściowym:\n " + huffmanStats.getFreqAll());
             } catch (IOException | InterruptedException ex) {
-                resultLabel.setText("Błąd podczas wyświetlania statystyk" + ex.getMessage());
+                resultLabel.setText("Błąd podczas wyświetlania statystyk: " + ex.getMessage());
             }
         });
 
@@ -198,7 +197,7 @@ public class HuffmanGUI extends Application {
         innerGridPane1.add(outputField, 1, 1);
         innerGridPane1.add(outputFileButton, 2, 1);
         innerGridPane1.add(compressionLabel, 0, 2);
-        innerGridPane1.add(compressionComboBox, 0, 3);
+        innerGridPane1.add(modeComboBox, 0, 3);
         innerGridPane1.add(compressButton, 0, 4);
         innerGridPane1.add(decompressButton, 1, 4);
         innerGridPane1.add(treeButton, 0, 5);
@@ -279,7 +278,7 @@ public class HuffmanGUI extends Application {
         compressButton.setPrefSize(150, 20);
         statystykiButton.setPrefSize(150, 50);
         treeButton.setPrefSize(150, 50);
-        compressionComboBox.setPrefSize(120, 10);
+        modeComboBox.setPrefSize(120, 10);
         decompressButton.setTextFill(Color.RED);
         decompressButton.setFont(Font.font("Arial Black", 12));
         compressButton.setTextFill(Color.GREEN);

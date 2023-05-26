@@ -3,7 +3,19 @@ import java.util.Map;
 
 public class HuffmanDecompressor {
 
-    public static void decompress(String inputFilename, String outputFilename) throws IOException {
+    public static void runD(String inputFilePath, String outputFilePath, String decompressionMode) throws IOException, InterruptedException {
+        if (decompressionMode.equals("huffman")) {
+            decompress(inputFilePath, outputFilePath);
+        } else if (decompressionMode.equals("huffman v2")) {
+            String programPath = "huffv2.exe";
+            String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", "tree2.txt", "-d x"};
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();
+
+        }
+    }
+
+    public static void decompress(String inputFilename, String outputFilename) {
         Map<String, Character> asciiMap = AsciiMapBuilder.getAsciiMap("tree.txt");
         try (DataInputStream inputFile = new DataInputStream(new FileInputStream(inputFilename));
              BufferedWriter outputFile = new BufferedWriter(new FileWriter(outputFilename))) {
@@ -44,18 +56,6 @@ public class HuffmanDecompressor {
             }
             outputFile.write(result.toString());
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        String inputFilename = "x.bin";
-        String outputFilename = "hh.txt";
-
-        try {
-            HuffmanDecompressor.decompress(inputFilename, outputFilename);
-            System.out.println("Decompression completed successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
