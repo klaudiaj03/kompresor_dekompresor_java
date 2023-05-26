@@ -30,21 +30,28 @@ public class HuffmanGUI extends Application {
 
     private TextField outputField;
     private ComboBox<String> modeComboBox;
-    private Button compressButton, decompressButton, treeButton, statystykiButton;
+    private Button compressButton, decompressButton, treeButton, statystykiButton, inputFileButton, outputFileButton, saveImageButton;
+    private Label inputFileLabel, outputFileLabel, compressionLabel, resultLabel, statsLabel, inputFileSize, outputFileSize, frequencyOf0, frequencyOf1, frequencyOfAll, treeFileSize;
+    private StackPane stackPane1, stackPane2, stackPane3, stackPane4;
+    private TextField inputField;
+    private GridPane root;
 
+    private Pane treeView;
+    private Stage primaryStage;
     HuffmanStats huffmanStats = new HuffmanStats();
 
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
 
 
         // ustawienia okna
         primaryStage.setTitle("Program Huffman");
         primaryStage.setOnCloseRequest(event -> System.exit(0));
-        Label inputFileLabel = new Label("Plik wejściowy:");
-        TextField inputField = new TextField();
-        Button inputFileButton = new Button("Wybierz");
+        inputFileLabel = new Label("Plik wejściowy:");
+        inputField = new TextField();
+        inputFileButton = new Button("Wybierz");
 
 // przypisanie akcji do przycisków
         inputFileButton.setOnAction(e -> {
@@ -56,9 +63,9 @@ public class HuffmanGUI extends Application {
         });
 
 
-        Label outputFileLabel = new Label("Plik wyjściowy:");
+        outputFileLabel = new Label("Plik wyjściowy:");
         outputField = new TextField();
-        Button outputFileButton = new Button("Wybierz");
+        outputFileButton = new Button("Wybierz");
 
         outputFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
@@ -68,12 +75,12 @@ public class HuffmanGUI extends Application {
             }
         });
         compressButton = new Button("Kompresuj");
-        Label compressionLabel = new Label("Tryb:");
+        compressionLabel = new Label("Tryb:");
         String[] Modes = {"huffman", "huffman v2"};
         modeComboBox = new ComboBox<>();
         modeComboBox.getItems().addAll(Modes);
         modeComboBox.getSelectionModel().selectFirst();
-        Label resultLabel = new Label();
+        resultLabel = new Label();
         compressButton.setOnAction(e -> {
             try {
                 String compressionMode = modeComboBox.getSelectionModel().getSelectedItem();
@@ -89,27 +96,27 @@ public class HuffmanGUI extends Application {
         decompressButton = new Button("Dekompresuj");
         decompressButton.setOnAction(e -> {
             try {
-                    String decompressionMode = modeComboBox.getSelectionModel().getSelectedItem();
-                    String inputFilePath = inputField.getText();
-                    String outputFilePath = outputField.getText();
-                    HuffmanDecompressor.runD(inputFilePath, outputFilePath, decompressionMode);
-                } catch (IOException | IllegalArgumentException | InterruptedException ex) {
-                    resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
-                }
-            });
+                String decompressionMode = modeComboBox.getSelectionModel().getSelectedItem();
+                String inputFilePath = inputField.getText();
+                String outputFilePath = outputField.getText();
+                HuffmanDecompressor.runD(inputFilePath, outputFilePath, decompressionMode);
+            } catch (IOException | IllegalArgumentException | InterruptedException ex) {
+                resultLabel.setText("Błąd podczas dekompresji: " + ex.getMessage());
+            }
+        });
 
         treeButton = new Button("Wyświetl \n drzewo");
         statystykiButton = new Button("Wyświetl \n statystyki");
-        Label statystyki = new Label("Statystyki");
-        Label inputFileSize = new Label();
-        Label outputFileSize = new Label();
-        Label treeFileSize = new Label();
-        Label frequencyOf0 = new Label();
-        Label frequencyOf1 = new Label();
-        Label frequencyOfAll = new Label();
+        statsLabel = new Label("Statystyki");
+        inputFileSize = new Label();
+        outputFileSize = new Label();
+        treeFileSize = new Label();
+        frequencyOf0 = new Label();
+        frequencyOf1 = new Label();
+        frequencyOfAll = new Label();
 
-        Pane treeView = new Pane();
-        Button saveImageButton = new Button("Zapisz obraz");
+        treeView = new Pane();
+        saveImageButton = new Button("Zapisz obraz");
         saveImageButton.setDisable(true);
 
         treeButton.setOnAction(e -> {
@@ -177,44 +184,55 @@ public class HuffmanGUI extends Application {
             }
         });
 
-
-        GridPane root = new GridPane();
+        root = new GridPane();
         root.setPadding(new Insets(20));
         root.setHgap(10);
         root.setVgap(10);
 
-// 1 ćwiartka
-        StackPane stackPane1 = createStackPane(300, 270);
-        GridPane innerGridPane1 = new GridPane();
-        innerGridPane1.setAlignment(Pos.CENTER);
-        innerGridPane1.setHgap(10);
-        innerGridPane1.setVgap(10);
-        innerGridPane1.setPadding(new Insets(1, 10, 1, 10));
-        innerGridPane1.add(inputFileLabel, 0, 0);
-        innerGridPane1.add(inputField, 1, 0);
-        innerGridPane1.add(inputFileButton, 2, 0);
-        innerGridPane1.add(outputFileLabel, 0, 1);
-        innerGridPane1.add(outputField, 1, 1);
-        innerGridPane1.add(outputFileButton, 2, 1);
-        innerGridPane1.add(compressionLabel, 0, 2);
-        innerGridPane1.add(modeComboBox, 0, 3);
-        innerGridPane1.add(compressButton, 0, 4);
-        innerGridPane1.add(decompressButton, 1, 4);
-        innerGridPane1.add(treeButton, 0, 5);
-        innerGridPane1.add(statystykiButton, 1, 5);
-        stackPane1.getChildren().add(innerGridPane1);
-        root.add(stackPane1, 0, 0);
+        optionsWindow();
+        statsWindow();
+        treeWindow();
+        infoWindow();
+        windowsLayout();
+        settings();
 
 
-// 2 ćwiartka
-        StackPane stackPane2 = createStackPane(300, 310);
+    }
+
+
+
+public void optionsWindow() {
+            stackPane1 = createStackPane(300, 270);
+            GridPane innerGridPane1 = new GridPane();
+            innerGridPane1.setAlignment(Pos.CENTER);
+            innerGridPane1.setHgap(10);
+            innerGridPane1.setVgap(10);
+            innerGridPane1.setPadding(new Insets(1, 10, 1, 10));
+            innerGridPane1.add(inputFileLabel, 0, 0);
+            innerGridPane1.add(inputField, 1, 0);
+            innerGridPane1.add(inputFileButton, 2, 0);
+            innerGridPane1.add(outputFileLabel, 0, 1);
+            innerGridPane1.add(outputField, 1, 1);
+            innerGridPane1.add(outputFileButton, 2, 1);
+            innerGridPane1.add(compressionLabel, 0, 2);
+            innerGridPane1.add(modeComboBox, 0, 3);
+            innerGridPane1.add(compressButton, 0, 4);
+            innerGridPane1.add(decompressButton, 1, 4);
+            innerGridPane1.add(treeButton, 0, 5);
+            innerGridPane1.add(statystykiButton, 1, 5);
+            stackPane1.getChildren().add(innerGridPane1);
+            root.add(stackPane1, 0, 0);
+        }
+
+    public void statsWindow() {
+        stackPane2 = createStackPane(300, 310);
         ScrollPane scrollPane = new ScrollPane();
         GridPane innerGridPane2 = new GridPane();
         innerGridPane2.setAlignment(Pos.CENTER_LEFT);
         innerGridPane2.setHgap(10);
         innerGridPane2.setVgap(10);
         innerGridPane2.setPadding(new Insets(10, 10, 10, 10));
-        innerGridPane2.add(statystyki, 0, 0);
+        innerGridPane2.add(statsLabel, 0, 0);
         innerGridPane2.add(inputFileSize, 0, 1);
         innerGridPane2.add(outputFileSize, 0, 2);
         innerGridPane2.add(treeFileSize, 0, 3);
@@ -226,39 +244,42 @@ public class HuffmanGUI extends Application {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         stackPane2.getChildren().add(scrollPane);
         root.add(stackPane2, 0, 1);
+    }
 
 
-// 3 ćwiartka
-        StackPane stackPane3 = createStackPane(640, 520);
-        GridPane innerGridPane3 = new GridPane();
-        ScrollPane scrollPane3 = new ScrollPane();
-        innerGridPane3.add(treeView, 0, 1);
-        innerGridPane3.add(saveImageButton, 2, 0);
-        scrollPane3.setContent(innerGridPane3);
-        innerGridPane3.setAlignment(Pos.CENTER);
-        scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        stackPane3.getChildren().add(scrollPane3);
-        root.add(stackPane3, 1, 0);
+        public void treeWindow() {
+            stackPane3 = createStackPane(640, 520);
+            GridPane innerGridPane3 = new GridPane();
+            ScrollPane scrollPane3 = new ScrollPane();
+            innerGridPane3.add(treeView, 0, 1);
+            innerGridPane3.add(saveImageButton, 2, 0);
+            scrollPane3.setContent(innerGridPane3);
+            innerGridPane3.setAlignment(Pos.CENTER);
+            scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+            scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+            stackPane3.getChildren().add(scrollPane3);
+            root.add(stackPane3, 1, 0);
+        }
 
-// 4 ćwiartka
-        StackPane stackPane4 = createStackPane( 640, 120);
+
+public void infoWindow() {
+        stackPane4 = createStackPane( 640, 120);
         stackPane4.setPadding(new Insets(0, 0, 10, 0)); // Dodaj padding 10 pikseli od dołu
         GridPane innerGridPane4 = new GridPane();
         innerGridPane4.setAlignment(Pos.CENTER); // Wyśrodkuj GridPane
         innerGridPane4.add(resultLabel, 1, 1);
         stackPane4.getChildren().add(innerGridPane4);
-        root.add(stackPane4, 1, 1);
+        root.add(stackPane4, 1, 1);}
 
-// Ustawienie nachodzenia siatek
+    public void windowsLayout() {
         GridPane.setConstraints(stackPane1, 0, 0, 1, 6);
         GridPane.setConstraints(stackPane2, 0, 6, 1, 5);
         GridPane.setConstraints(stackPane3, 1, 0, 1, 7);
         GridPane.setConstraints(stackPane4, 1, 8, 1, 3);
+    }
 
 
-
-
+    public void settings() {
         inputFileSize.setFont(new Font("Verdana", 12));
         outputFileSize.setFont(Font.font("Verdana", 12));
         treeFileSize.setFont(Font.font("Verdana", 12));
@@ -271,7 +292,7 @@ public class HuffmanGUI extends Application {
         resultLabel.setFont(Font.font("Verdana", 12));
         outputFileButton.setPrefSize(25, 25);
         inputFileButton.setPrefSize(25, 25);
-        statystyki.setFont(Font.font("Arial Black", 15));
+        statsLabel.setFont(Font.font("Arial Black", 15));
         resultLabel.setPrefSize(550, 100);
         resultLabel.setWrapText(true);
         decompressButton.setPrefSize(150, 20);
@@ -310,4 +331,4 @@ public class HuffmanGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-}
+    }
