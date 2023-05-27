@@ -9,6 +9,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
@@ -130,8 +131,7 @@ public class HuffmanGUI extends Application {
                 try {
                     HuffmanTree huffmanTree = new HuffmanTree();
                     huffmanTree.buildTreeFromFile(treeFilePath);
-
-                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, 500, 80.0, 100);
+                    huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), treeView, (int) Screen.getPrimary().getBounds().getWidth(), 80.0, 100);
                     Platform.runLater(() -> {
                         saveImageButton.setDisable(false);
                         treeButton.setDisable(false);
@@ -168,6 +168,7 @@ public class HuffmanGUI extends Application {
                 resultLabel.setText("Błąd podczas zapisu obrazu: " + ex.getMessage());
             }
         });
+
         statystykiButton.setOnAction(e -> {
             String inputFile = inputField.getText();
             try {
@@ -201,28 +202,28 @@ public class HuffmanGUI extends Application {
 
 
 
-public void optionsWindow() {
-            stackPane1 = createStackPane(300, 270);
-            GridPane innerGridPane1 = new GridPane();
-            innerGridPane1.setAlignment(Pos.CENTER);
-            innerGridPane1.setHgap(10);
-            innerGridPane1.setVgap(10);
-            innerGridPane1.setPadding(new Insets(1, 10, 1, 10));
-            innerGridPane1.add(inputFileLabel, 0, 0);
-            innerGridPane1.add(inputField, 1, 0);
-            innerGridPane1.add(inputFileButton, 2, 0);
-            innerGridPane1.add(outputFileLabel, 0, 1);
-            innerGridPane1.add(outputField, 1, 1);
-            innerGridPane1.add(outputFileButton, 2, 1);
-            innerGridPane1.add(compressionLabel, 0, 2);
-            innerGridPane1.add(modeComboBox, 0, 3);
-            innerGridPane1.add(compressButton, 0, 4);
-            innerGridPane1.add(decompressButton, 1, 4);
-            innerGridPane1.add(treeButton, 0, 5);
-            innerGridPane1.add(statystykiButton, 1, 5);
-            stackPane1.getChildren().add(innerGridPane1);
-            root.add(stackPane1, 0, 0);
-        }
+    public void optionsWindow() {
+        stackPane1 = createStackPane(300, 270);
+        GridPane innerGridPane1 = new GridPane();
+        innerGridPane1.setAlignment(Pos.CENTER);
+        innerGridPane1.setHgap(10);
+        innerGridPane1.setVgap(10);
+        innerGridPane1.setPadding(new Insets(1, 10, 1, 10));
+        innerGridPane1.add(inputFileLabel, 0, 0);
+        innerGridPane1.add(inputField, 1, 0);
+        innerGridPane1.add(inputFileButton, 2, 0);
+        innerGridPane1.add(outputFileLabel, 0, 1);
+        innerGridPane1.add(outputField, 1, 1);
+        innerGridPane1.add(outputFileButton, 2, 1);
+        innerGridPane1.add(compressionLabel, 0, 2);
+        innerGridPane1.add(modeComboBox, 0, 3);
+        innerGridPane1.add(compressButton, 0, 4);
+        innerGridPane1.add(decompressButton, 1, 4);
+        innerGridPane1.add(treeButton, 0, 5);
+        innerGridPane1.add(statystykiButton, 1, 5);
+        stackPane1.getChildren().add(innerGridPane1);
+        root.add(stackPane1, 0, 0);
+    }
 
     public void statsWindow() {
         stackPane2 = createStackPane(300, 310);
@@ -246,27 +247,22 @@ public void optionsWindow() {
         root.add(stackPane2, 0, 1);
     }
 
+    public void treeWindow() {
+        stackPane3 = createStackPane(640, 520);
+        ScrollPane scrollPane3 = new ScrollPane(treeView);
+        scrollPane3.setPrefSize(640, 520);
+        scrollPane3.setPannable(true);
+        scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        stackPane3.getChildren().add(scrollPane3);
+        root.add(stackPane3, 1, 0);
+    }
 
-        public void treeWindow() {
-            stackPane3 = createStackPane(640, 520);
-            GridPane innerGridPane3 = new GridPane();
-            ScrollPane scrollPane3 = new ScrollPane();
-            innerGridPane3.add(treeView, 0, 1);
-            innerGridPane3.add(saveImageButton, 2, 0);
-            scrollPane3.setContent(innerGridPane3);
-            innerGridPane3.setAlignment(Pos.CENTER);
-            scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-            scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-            stackPane3.getChildren().add(scrollPane3);
-            root.add(stackPane3, 1, 0);
-        }
-
-
-public void infoWindow() {
+    public void infoWindow() {
         stackPane4 = createStackPane( 640, 120);
-        stackPane4.setPadding(new Insets(0, 0, 10, 0)); // Dodaj padding 10 pikseli od dołu
+        stackPane4.setPadding(new Insets(0, 0, 10, 0));
         GridPane innerGridPane4 = new GridPane();
-        innerGridPane4.setAlignment(Pos.CENTER); // Wyśrodkuj GridPane
+        innerGridPane4.setAlignment(Pos.CENTER);
         innerGridPane4.add(resultLabel, 1, 1);
         stackPane4.getChildren().add(innerGridPane4);
         root.add(stackPane4, 1, 1);}
@@ -331,4 +327,4 @@ public void infoWindow() {
     public static void main(String[] args) {
         launch(args);
     }
-    }
+}
