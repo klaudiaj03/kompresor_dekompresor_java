@@ -78,7 +78,7 @@ public class HuffmanTree {
 
         double depthPow = Math.pow(2, depth - 1);
         double childX1 = x - (horizontalGap * depthPow) - (circleRadius / 2);
-        double childX2 = x + (horizontalGap * depthPow) - (circleRadius / 2);
+        double childX2 = x + (horizontalGap * depthPow) + (circleRadius / 2);
         double childY = y + verticalGap + verticalOffset;
 
         int freq = calculateChildFrequency(inputFilePath, node);
@@ -102,7 +102,7 @@ public class HuffmanTree {
 
         if (node.getLeft() != null) {
             Line leftLine = new Line(x, y + circleRadius, childX1, childY - circleRadius);
-            Text leftCodeText = new Text(x - circleRadius / 2, y + circleRadius + 30, "0");
+            Text leftCodeText = new Text((x + childX1) / 2 - 10, (y + childY)/2 , "0");
             leftCodeText.setStyle("-fx-font-family: monospace");
             nodesToAdd.add(leftLine);
             nodesToAdd.add(leftCodeText);
@@ -112,7 +112,7 @@ public class HuffmanTree {
 
         if (node.getRight() != null) {
             Line rightLine = new Line(x, y + circleRadius, childX2, childY - circleRadius);
-            Text rightCodeText = new Text(x + circleRadius / 2, y + circleRadius + 30, "1");
+            Text rightCodeText = new Text((x + childX2) / 2, (y + childY)/2, "1");
             rightCodeText.setStyle("-fx-font-family: monospace");
             nodesToAdd.add(rightLine);
             nodesToAdd.add(rightCodeText);
