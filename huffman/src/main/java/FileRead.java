@@ -6,6 +6,7 @@ public class FileRead {
     public static Map<Integer, Integer> getBinaryFrequency(String fileName) {
         Map<Integer, Integer> binaryFrequency = new HashMap<>();
 
+
         try (DataInputStream inputStream = new DataInputStream(new FileInputStream(fileName))) {
             while (inputStream.available() > 0) {
                 byte value = inputStream.readByte();
@@ -16,7 +17,6 @@ public class FileRead {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Wystąpił błąd podczas odczytu pliku: " + e.getMessage());
             return null;
         }
 

@@ -4,10 +4,9 @@ import java.util.HashMap;
 public class SavedFrequency {
         private String freqAll;
 
-        public void generateStats(String inputFilePath, String Mode) throws IOException, InterruptedException {
+        public void generateStats(String inputFilePath, String outputFilePath, String Mode) throws IOException, InterruptedException {
 
             if (inputFilePath.endsWith(".txt")) {
-                String outputFilePath = "temp.bin";
                 HuffmanCompressor.runC(inputFilePath, outputFilePath, Mode);
 
 
@@ -22,7 +21,6 @@ public class SavedFrequency {
                 }
                 freqAll = freqAllBuilder.toString();
             } else if (inputFilePath.endsWith(".bin")) {
-                String outputFilePath = "temp.txt";
                 HuffmanDecompressor.decompress(inputFilePath, outputFilePath);
                 HashMap < Integer, Integer > frequencyMap = DataSave.getFrequencyMap(outputFilePath);
                 StringBuilder freqAllBuilder = new StringBuilder();

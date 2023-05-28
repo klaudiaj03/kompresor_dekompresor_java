@@ -130,8 +130,8 @@ public class HuffmanTree {
         double horizontalGap = 15.0;
         double childX1 = getSize(node.getLeft());
         double childX2 = getSize(node.getRight());
-        double treeWidth= childX1 + circleRadius + childX2 + horizontalGap;
-        return treeWidth;
+        return childX1 + circleRadius + childX2 + horizontalGap;
+
     }
 
 

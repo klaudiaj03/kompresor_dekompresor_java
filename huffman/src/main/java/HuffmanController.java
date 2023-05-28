@@ -205,6 +205,16 @@ public class HuffmanController extends Application {
         primaryStage.show();
     }
 
+    public void clearStats(){
+        getInputFileSize().setText("");
+        getOutputFileSize().setText("");
+        getTreeFileSize().setText("");
+        getFrequencyOf0().setText("");
+        getFrequencyOf1().setText("");
+        getFrequencyOfAll().setText("");
+    }
+
+
     private StackPane createStackPane(Integer width, Integer hight) {
         Rectangle border = new Rectangle(width, hight);
         border.setFill(null);

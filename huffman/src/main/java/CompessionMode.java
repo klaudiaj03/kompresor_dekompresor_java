@@ -10,9 +10,7 @@ public class CompessionMode {
         modeComboBox = new ComboBox<>();
         String[] modes = {"huffman", "huffman v2"};
         modeComboBox.getItems().addAll(modes);
-        modeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            selectedMode = newValue;
-        });
+        modeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectedMode = newValue);
         modeComboBox.getSelectionModel().selectFirst();
     }
 
