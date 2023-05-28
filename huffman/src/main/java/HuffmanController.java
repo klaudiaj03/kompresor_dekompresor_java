@@ -15,8 +15,7 @@ import javafx.scene.text.Font;
 public class HuffmanController extends Application {
 
     private TextField outputField;
-    private ComboBox<String> modeComboBox;
-    private Button compressButton, decompressButton, treeButton, statystykiButton, inputFileButton, outputFileButton, saveImageButton;
+    private Button compressButton, decompressButton, treeButton, statsButton, inputFileButton, outputFileButton, saveImageButton;
     private Label inputFileLabel, outputFileLabel, compressionLabel, resultLabel, statsLabel, inputFileSize, outputFileSize, frequencyOf0, frequencyOf1, frequencyOfAll, treeFileSize;
     private StackPane stackPane1, stackPane2, stackPane3, stackPane4;
     private TextField inputField;
@@ -44,13 +43,12 @@ public class HuffmanController extends Application {
         compressButton = new Button("Kompresuj");
         compressionLabel = new Label("Tryb:");
         compessionMode.selectCompressionMode();
-        modeComboBox = new ComboBox<>();
         resultLabel = new Label();
 
         decompressButton = new Button("Dekompresuj");
 
         treeButton = new Button("Wyświetl \n drzewo");
-        statystykiButton = new Button("Wyświetl \n statystyki");
+        statsButton = new Button("Wyświetl \n statystyki");
         statsLabel = new Label("Statystyki");
         inputFileSize = new Label();
         outputFileSize = new Label();
@@ -99,7 +97,7 @@ public class HuffmanController extends Application {
         innerGridPane1.add(compressButton, 0, 4);
         innerGridPane1.add(decompressButton, 1, 4);
         innerGridPane1.add(treeButton, 0, 5);
-        innerGridPane1.add(statystykiButton, 1, 5);
+        innerGridPane1.add(statsButton, 1, 5);
         stackPane1.getChildren().add(innerGridPane1);
         root.add(stackPane1, 0, 0);
     }
@@ -186,7 +184,7 @@ public class HuffmanController extends Application {
         resultLabel.setWrapText(true);
         decompressButton.setPrefSize(150, 20);
         compressButton.setPrefSize(150, 20);
-        statystykiButton.setPrefSize(150, 50);
+        statsButton.setPrefSize(150, 50);
         treeButton.setPrefSize(150, 50);
         saveImageButton.setPrefSize(120, 60);
         compessionMode.getModeComboBox().setPrefSize(120, 10);
@@ -194,7 +192,7 @@ public class HuffmanController extends Application {
         decompressButton.setFont(Font.font("Arial Black", 12));
         compressButton.setTextFill(Color.GREEN);
         compressButton.setFont(Font.font("Arial Black", 12));
-        statystykiButton.setFont(Font.font("Arial Black", 13));
+        statsButton.setFont(Font.font("Arial Black", 13));
         saveImageButton.setFont(Font.font("Arial Black", 17));
         treeButton.setFont(Font.font("Arial Black", 13));
 
@@ -224,10 +222,6 @@ public class HuffmanController extends Application {
         launch(args);
     }
 
-    public ComboBox<String> getModeComboBox() {
-        return modeComboBox;
-    }
-
     public Label getResultLabel() {
         return resultLabel;
     }
@@ -248,8 +242,8 @@ public class HuffmanController extends Application {
         return outputFileSize;
     }
 
-    public Button getStatystykiButton() {
-        return statystykiButton;
+    public Button getStatsButton() {
+        return statsButton;
     }
 
     public Button getSaveImageButton() {

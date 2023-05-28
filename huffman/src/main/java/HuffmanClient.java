@@ -14,6 +14,7 @@ public class HuffmanClient {
 
     public HuffmanClient(HuffmanController huffmanController) {
         this.huffmanController = huffmanController;
+
     }
 
     public void registerEventHandlers() {
@@ -113,10 +114,10 @@ public class HuffmanClient {
         FileSize fileSize= new FileSize();
         SavedFrequency savedFrequency= new SavedFrequency();
         BitFrequency huffmanStats= new BitFrequency();
-        huffmanController.getStatystykiButton().setOnAction(e -> {
+        huffmanController.getStatsButton().setOnAction(e -> {
             String inputFile = huffmanController.getInputField().getText();
             try {
-                String Mode = huffmanController.getModeComboBox().getSelectionModel().getSelectedItem();
+                String Mode = compessionMode.getModeComboBox().getSelectionModel().getSelectedItem();
                 huffmanStats.generateStats(inputFile, Mode);
                 fileSize.generateStats(inputFile, Mode);
                 savedFrequency.generateStats(inputFile, Mode);
