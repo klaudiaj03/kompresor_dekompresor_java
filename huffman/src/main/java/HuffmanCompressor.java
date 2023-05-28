@@ -5,8 +5,8 @@ public class HuffmanCompressor {
 
 
     public static String runC(String inputFilePath, String outputFilePath, String compressionMode) throws InterruptedException, IOException {
-        if (compressionMode.equals("huffman")) {
-            String programPath = "huffman.exe";
+        if ("huffman".equals(compressionMode)) {
+            String programPath = "C:\\Users\\Klaudia\\Desktop\\Huffman JAVA\\2023L_JIMP2_proj_git_gr1\\huffman\\huffman.exe";
             String[] command = {programPath, "-i", inputFilePath, "-o", outputFilePath, "-c"};
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -17,7 +17,7 @@ public class HuffmanCompressor {
             }
             process.waitFor();
             return result.toString();
-        } else if (compressionMode.equals("huffman v2")) {
+        } else if ("huffman v2".equals(compressionMode)) {
             String programPath = "huffv2.exe";
             String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", "tree2.txt", "-c x"};
             Process process = Runtime.getRuntime().exec(command);

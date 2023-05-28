@@ -14,7 +14,7 @@ public class HuffmanTree {
     private HuffmanNode root;
 
     public void buildTreeFromFile(String filePath) throws IOException {
-        Map<Integer, String> codeMap = AsciiMapBuilder.getAsciiCodeMap(filePath);
+        Map<Integer, String> codeMap = ReadTree.getAsciiCodeMap(filePath);
 
         root = buildTreeFromCodeMap(codeMap);
     }
@@ -45,7 +45,7 @@ public class HuffmanTree {
             return 0;
         }
 
-        HashMap<Integer, Integer> frequencyMap = HuffmanStats.getFrequencyMap(inputFilePath);
+        HashMap<Integer, Integer> frequencyMap = DataSave.getFrequencyMap(inputFilePath);
 
         int leftFrequency = calculateChildFrequency(inputFilePath, node.getLeft());
         int rightFrequency = calculateChildFrequency(inputFilePath, node.getRight());
@@ -78,7 +78,7 @@ public class HuffmanTree {
 
         double depthPow = Math.pow(2, depth - 1);
         double childX1 = x - (horizontalGap * depthPow) - (circleRadius / 2);
-        double childX2 = x + (horizontalGap * depthPow) + (circleRadius / 2);
+        double childX2 = x + (horizontalGap * depthPow) - (circleRadius / 2);
         double childY = y + verticalGap + verticalOffset;
 
         int freq = calculateChildFrequency(inputFilePath, node);
@@ -116,12 +116,26 @@ public class HuffmanTree {
             rightCodeText.setStyle("-fx-font-family: monospace");
             nodesToAdd.add(rightLine);
             nodesToAdd.add(rightCodeText);
-
             displayTree(inputFilePath, node.getRight(), parent, childX2, childY, verticalOffset + verticalGap);
         }
 
         Platform.runLater(() -> parent.getChildren().addAll(nodesToAdd));
     }
+    public double getSize(HuffmanNode node) {
+        if (node == null) {
+            return 0.0;
+        }
+
+        double circleRadius = 25.0;
+        double horizontalGap = 15.0;
+        double childX1 = getSize(node.getLeft());
+        double childX2 = getSize(node.getRight());
+        double treeWidth= childX1 + circleRadius + childX2 + horizontalGap;
+        return treeWidth;
+    }
+
+
+
 
 
 }
