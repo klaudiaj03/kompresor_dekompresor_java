@@ -3,17 +3,6 @@ import java.util.Map;
 
 public class HuffmanDecompressor {
 
-    public static void runD(String inputFilePath, String outputFilePath, String decompressionMode) throws IOException, InterruptedException {
-        if ("huffman".equals(decompressionMode)) {
-            decompress(inputFilePath, outputFilePath);
-        } else if ("huffman v2".equals(decompressionMode)) {
-            String programPath = "huffv2.exe";
-            String[] command = {programPath, "-r", inputFilePath, "-s", outputFilePath, "-t", "tree2.txt", "-d x"};
-            Process process = Runtime.getRuntime().exec(command);
-            process.waitFor();
-
-        }
-    }
 
     public static void decompress(String inputFilename, String outputFilename) {
         Map<String, Character> asciiMap = ReadTree.getAsciiMap("tree.txt");

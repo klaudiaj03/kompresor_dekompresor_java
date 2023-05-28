@@ -60,7 +60,7 @@ public class HuffmanController extends Application {
         frequencyOfAll = new Label();
 
         treeView = new Pane();
-        saveImageButton = new Button("Zapisz obraz");
+        saveImageButton = new Button("Zapisz\ndrzewo");
         saveImageButton.setDisable(true);
 
         root = new GridPane();
@@ -128,21 +128,23 @@ public class HuffmanController extends Application {
 
     public void treeWindow() {
         stackPane3 = createStackPane(640, 520);
-        GridPane innerGridPane3 = new GridPane();
+
         ScrollPane scrollPane3 = new ScrollPane(treeView);
         scrollPane3.setPrefSize(640, 520);
         scrollPane3.setPannable(true);
         scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane3.setStyle("-fx-background-color: white;"); // Dodajemy białe tło do scrollPane
-        StackPane.setAlignment(scrollPane3, Pos.CENTER); // Ustawiamy scrollPane na środku stackPane
-        stackPane3.getChildren().add(scrollPane3);
-        stackPane3.setAlignment(Pos.CENTER); // Wyśrodkowujemy stackPane
+        scrollPane3.setStyle("-fx-background-color: white;");
+        StackPane.setAlignment(saveImageButton, Pos.TOP_RIGHT); // Ustaw przycisk w prawym górnym rogu
+        StackPane.setMargin(saveImageButton, new Insets(20)); // Dodaj marginesy wokół przycisku
+
+        stackPane3.getChildren().addAll(scrollPane3, saveImageButton);
+        stackPane3.setAlignment(Pos.CENTER); // Wyśrodkowanie stackPane
         root.add(stackPane3, 1, 0);
 
         // Ustawienie początkowego widoku na środek
-        scrollPane3.setHvalue(0.5); // Ustawienie poziomego przewijania na środek
-        scrollPane3.setVvalue(0.5); // Ustawienie pionowego przewijania na środek
+        scrollPane3.setHvalue(0.5);
+        scrollPane3.setVvalue(0.5);
     }
 
 
@@ -186,12 +188,14 @@ public class HuffmanController extends Application {
         compressButton.setPrefSize(150, 20);
         statystykiButton.setPrefSize(150, 50);
         treeButton.setPrefSize(150, 50);
+        saveImageButton.setPrefSize(120, 60);
         compessionMode.getModeComboBox().setPrefSize(120, 10);
         decompressButton.setTextFill(Color.RED);
         decompressButton.setFont(Font.font("Arial Black", 12));
         compressButton.setTextFill(Color.GREEN);
         compressButton.setFont(Font.font("Arial Black", 12));
         statystykiButton.setFont(Font.font("Arial Black", 13));
+        saveImageButton.setFont(Font.font("Arial Black", 17));
         treeButton.setFont(Font.font("Arial Black", 13));
 
         Scene scene = new Scene(root);

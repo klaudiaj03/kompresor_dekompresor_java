@@ -3,7 +3,6 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class HuffmanClient {
-    private HuffmanController huffmanController;
+    private final HuffmanController huffmanController;
 
     public HuffmanClient(HuffmanController huffmanController) {
         this.huffmanController = huffmanController;
@@ -56,7 +55,7 @@ public class HuffmanClient {
                 String mode = compessionMode.getSelectedMode();
                 String inputFilePath = huffmanController.getInputField().getText();
                 String outputFilePath = huffmanController.getOutputField().getText();
-                HuffmanDecompressor.runD(inputFilePath, outputFilePath, mode);
+                DecompressionMode.runD(inputFilePath, outputFilePath, mode);
             } catch (IOException | IllegalArgumentException | InterruptedException ex) {
                 huffmanController.getResultLabel().setText("Błąd podczas dekompresji: " + ex.getMessage());
             }

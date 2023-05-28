@@ -1,12 +1,25 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class HuffmanCompressor {
 
 
     public static String runC(String inputFilePath, String outputFilePath, String compressionMode) throws InterruptedException, IOException {
+        if (inputFilePath == null || !inputFilePath.toLowerCase().endsWith(".txt")) {
+            return "Błędny plik wejściowy. Oczekiwano pliku o rozszerzeniu .txt.";
+        }
+
+        if (outputFilePath == null || !outputFilePath.toLowerCase().endsWith(".bin")) {
+            return "Błędny plik wyjściowy. Oczekiwano pliku o rozszerzeniu .bin.";
+        }
+
+        if (!Files.exists(Paths.get(inputFilePath))) {
+            return "Plik wejściowy nie istnieje.";
+        }
         if ("huffman".equals(compressionMode)) {
-            String programPath = "C:\\Users\\Klaudia\\Desktop\\Huffman JAVA\\2023L_JIMP2_proj_git_gr1\\huffman\\huffman.exe";
+            String programPath = "huffman.exe";
             String[] command = {programPath, "-i", inputFilePath, "-o", outputFilePath, "-c"};
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -24,6 +37,6 @@ public class HuffmanCompressor {
             process.waitFor();
             return null;
         }
-        return null;
+        return "Nieznany tryb kompresji";
     }
 }

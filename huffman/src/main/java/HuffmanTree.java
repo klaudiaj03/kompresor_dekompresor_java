@@ -72,9 +72,9 @@ public class HuffmanTree {
             return;
         }
         int depth = calculateDepth(node);
-        double circleRadius = 25.0;
-        double verticalGap = 10.0;
-        double horizontalGap = 15.0;
+        double circleRadius = 30.0;
+        double verticalGap = 15.0;
+        double horizontalGap = 17.0;
 
         double depthPow = Math.pow(2, depth - 1);
         double childX1 = x - (horizontalGap * depthPow) - (circleRadius / 2);
