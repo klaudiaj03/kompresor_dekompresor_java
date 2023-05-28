@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AsciiMapBuilder {
+public class ReadTree {
 
     public static Map<String, Character> getAsciiMap(String fileName) {
         Map<String, Character> asciiMap = new HashMap<>();
