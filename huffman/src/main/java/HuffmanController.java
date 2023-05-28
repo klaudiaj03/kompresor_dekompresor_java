@@ -135,7 +135,6 @@ public class HuffmanController extends Application {
         scrollPane3.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane3.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane3.setStyle("-fx-background-color: white;"); // Dodajemy białe tło do scrollPane
-
         StackPane.setAlignment(scrollPane3, Pos.CENTER); // Ustawiamy scrollPane na środku stackPane
         stackPane3.getChildren().add(scrollPane3);
         stackPane3.setAlignment(Pos.CENTER); // Wyśrodkowujemy stackPane
