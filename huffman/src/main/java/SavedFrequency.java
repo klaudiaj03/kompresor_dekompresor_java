@@ -7,7 +7,7 @@ public class SavedFrequency {
         public void generateStats(String inputFilePath, String outputFilePath, String Mode) throws IOException, InterruptedException {
 
             if (inputFilePath.endsWith(".txt")) {
-                HuffmanCompressor.runC(inputFilePath, outputFilePath, Mode);
+                CompressionMode.runC(inputFilePath, outputFilePath, Mode);
 
 
                 HashMap< Integer, Integer > frequencyMap = DataSave.getFrequencyMap(inputFilePath);

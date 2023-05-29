@@ -9,7 +9,7 @@ public class BitFrequency {
 
     public void generateStats(String inputFilePath, String outputFilePath, String Mode) throws IOException, InterruptedException {
         if (inputFilePath.endsWith(".txt")) {
-            HuffmanCompressor.runC(inputFilePath, outputFilePath, Mode);
+            CompressionMode.runC(inputFilePath, outputFilePath, Mode);
             Map < Integer, Integer > bitsMap = FileRead.getBinaryFrequency(outputFilePath);
             frequencyOf0Huffman = bitsMap != null ? bitsMap.get(0) : 0;
             frequencyOf1Huffman = bitsMap != null ? bitsMap.get(1) : 0;

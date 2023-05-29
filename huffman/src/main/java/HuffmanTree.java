@@ -19,7 +19,7 @@ public class HuffmanTree {
         root = buildTreeFromCodeMap(codeMap);
     }
 
-    private HuffmanNode buildTreeFromCodeMap(Map<Integer, String> codeMap) {
+    HuffmanNode buildTreeFromCodeMap(Map<Integer, String> codeMap) {
         PriorityQueue<HuffmanNode> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(HuffmanNode::getFrequency));
         for (Map.Entry<Integer, String> entry : codeMap.entrySet()) {
             int asciiCode = entry.getKey();

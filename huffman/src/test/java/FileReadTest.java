@@ -12,7 +12,7 @@ public class FileReadTest {
     public void testGetBinaryFrequency_EmptyFile() {
         //given
         Map<Integer, Integer> expectedFrequency = new HashMap<>();
-        String fileName = "empty_file.bin";
+        String fileName = "testFiles/test.bin";
 
         //when
         Map<Integer, Integer> result = FileRead.getBinaryFrequency(fileName);
@@ -23,7 +23,7 @@ public class FileReadTest {
     @Test
     public void testGetBinaryFrequency_NonExistingFile() {
         //given
-        String fileName = "non_existing_file.bin";
+        String fileName = "testFiles/non_existing_file.bin";
 
         //then
         Map<Integer, Integer> result = FileRead.getBinaryFrequency(fileName);
@@ -34,7 +34,7 @@ public class FileReadTest {
     @Test
     public void testGetBinaryFrequency_UnreadableFile() {
         //given
-        String fileName = "unreadable_file.bin";
+        String fileName = "testFiles/unreadable_file.bin";
 
         //when
         Map<Integer, Integer> result = FileRead.getBinaryFrequency(fileName);
@@ -45,7 +45,7 @@ public class FileReadTest {
     @Test
     public void testGetBinaryFrequency_FileNotFound() {
         // given
-        String fileName = "nonexistentfile.txt";
+        String fileName = "testFiles/nonexistentfile.txt";
 
         // when
         Map<Integer, Integer> actualFrequency = FileRead.getBinaryFrequency(fileName);

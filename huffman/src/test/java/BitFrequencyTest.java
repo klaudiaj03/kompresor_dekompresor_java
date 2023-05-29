@@ -1,9 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BitFrequencyTest {
 
@@ -11,8 +8,8 @@ public class BitFrequencyTest {
     public void testGenerateStatsForNonExistingFile() throws IOException, InterruptedException {
         //given
         BitFrequency bitFrequency = new BitFrequency();
-        String inputFilePath = "nonexistingfile.txt";
-        String outputFilePath = "output.txt";
+        String inputFilePath = "testFiles/nonexistingfile.txt";
+        String outputFilePath = "testFiles/result.txt";
         String mode = "mode";
 
         //when

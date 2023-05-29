@@ -9,7 +9,7 @@ class DataSaveTest {
     @Test
     void givenEmptyFile_whenGetFrequencyMap_thenEmptyMapReturned() {
         // given
-        String filePath = "test.txt";
+        String filePath = "testFiles/test.txt";
 
         // when
         HashMap<Integer, Integer> frequencyMap;
@@ -28,7 +28,7 @@ class DataSaveTest {
     @Test
     void givenFileWithUniqueCharacters_whenGetFrequencyMap_thenCorrectMapReturned() {
         // given
-        String filePath = "test3.txt";
+        String filePath = "testFiles/test3.txt";
 
         // when
         HashMap<Integer, Integer> frequencyMap;
@@ -54,7 +54,7 @@ class DataSaveTest {
     @Test
     void givenFileWithRepeatedCharacters_whenGetFrequencyMap_thenCorrectMapReturned() {
         // given
-        String filePath = "test2.txt";
+        String filePath = "testFiles/test2.txt";
 
         // when
         HashMap<Integer, Integer> frequencyMap;

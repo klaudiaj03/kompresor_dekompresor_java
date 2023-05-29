@@ -12,7 +12,7 @@ public class FileSize {
 
         if (inputFilePath.endsWith(".txt")) {
             String treeFilePath = "tree.txt";
-            HuffmanCompressor.runC(inputFilePath, outputFilePath, Mode);
+            CompressionMode.runC(inputFilePath, outputFilePath, Mode);
             inputFileSize = getFileSize(inputFilePath);
             outputFileSize = getFileSize(outputFilePath);
             treeFileSizeHuffman = getFileSize(treeFilePath);
