@@ -36,15 +36,13 @@ public class HuffmanClient {
             huffmanController.getOutputField().setText(selectedFile.getAbsolutePath());
         }
         });
-        CompessionMode compessionMode = new CompessionMode();
-        compessionMode.selectCompressionMode();
 
         huffmanController.getCompressButton().setOnAction(e -> {
         try {
-            String mode = compessionMode.getSelectedMode();
+            String compressionMode = huffmanController.getModeComboBox().getSelectionModel().getSelectedItem();
             String inputFilePath = huffmanController.getInputField().getText();
             String outputFilePath = huffmanController.getOutputField().getText();
-            String result = HuffmanCompressor.runC(inputFilePath, outputFilePath, mode);
+            String result = CompressionMode.runC(inputFilePath, outputFilePath, compressionMode);
             huffmanController.clearStats();
             huffmanController.getResultLabel().setText(result);
         } catch (IOException | IllegalArgumentException | InterruptedException ex) {
@@ -53,14 +51,13 @@ public class HuffmanClient {
         }
         });
 
-        compessionMode.selectCompressionMode();
 
         huffmanController.getDecompressButton().setOnAction(e -> {
         try {
-            String mode = compessionMode.getSelectedMode();
+            String compressionMode = huffmanController.getModeComboBox().getSelectionModel().getSelectedItem();
             String inputFilePath = huffmanController.getInputField().getText();
             String outputFilePath = huffmanController.getOutputField().getText();
-            String result = DecompressionMode.runD(inputFilePath, outputFilePath, mode);
+            String result = DecompressionMode.runD(inputFilePath, outputFilePath, compressionMode);
             huffmanController.clearStats();
             huffmanController.getResultLabel().setText(result);
         } catch (IOException | IllegalArgumentException | InterruptedException ex) {
@@ -71,31 +68,40 @@ public class HuffmanClient {
 
 
         huffmanController.getTreeButton().setOnAction(e -> {
-                String treeFilePath = "tree.txt";
-        String inputFilePath = huffmanController.getInputField().getText();
+            String treeFilePath = "tree.txt";
+            String inputFilePath = huffmanController.getInputField().getText();
 
-        huffmanController.getTreeButton().setDisable(true);
-        huffmanController.getSaveImageButton().setDisable(true);
+            huffmanController.getTreeButton().setDisable(true);
+            huffmanController.getSaveImageButton().setDisable(true);
 
-        Thread thread = new Thread(() -> {
-        try {
-            HuffmanTree huffmanTree = new HuffmanTree();
-            huffmanTree.buildTreeFromFile(treeFilePath);
-            double treeSize = huffmanTree.getSize(huffmanTree.getRoot());
-            huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), huffmanController.getTreeView(), treeSize, 80.0, 100);
-            Platform.runLater(() -> {
-                    huffmanController.getSaveImageButton().setDisable(false);
-            huffmanController.getTreeButton().setDisable(false);
+            Thread thread = new Thread(() -> {
+                try {
+                    String compressionMode = huffmanController.getModeComboBox().getSelectionModel().getSelectedItem();
+                    if (compressionMode.equals("huffman")) {
+                        HuffmanTree huffmanTree = new HuffmanTree();
+                        huffmanTree.buildTreeFromFile(treeFilePath);
+                        double treeSize = huffmanTree.getSize(huffmanTree.getRoot());
+                        huffmanTree.displayTree(inputFilePath, huffmanTree.getRoot(), huffmanController.getTreeView(), treeSize, 80.0, 100);
+                        Platform.runLater(() -> {
+                            huffmanController.getSaveImageButton().setDisable(false);
+                            huffmanController.getTreeButton().setDisable(false);
+                        });
+                    } else if (compressionMode.equals("huffman v2")) {
+                        Platform.runLater(() -> {
+                            huffmanController.getResultLabel().setText("Niemożliwe jest utworzenie drzewa dla trybu 'huffman v2'.");
+                            huffmanController.getTreeButton().setDisable(false);
+                        });
+                    }
+                } catch (IOException ex) {
+                    Platform.runLater(() -> {
+                        huffmanController.getResultLabel().setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
+                        huffmanController.getTreeButton().setDisable(false);
                     });
-        } catch (IOException ex) {
-            Platform.runLater(() -> {
-                    huffmanController.getResultLabel().setText("Błąd podczas tworzenia drzewa: " + ex.getMessage());
-            huffmanController.getTreeButton().setDisable(false);
-                    });
-        }
+                }
             });
-        thread.start();
+            thread.start();
         });
+
 
         huffmanController.getSaveImageButton().setOnAction(e -> {
         try {
@@ -126,10 +132,10 @@ public class HuffmanClient {
         try {
             if (!inputFile.isEmpty() && !outputFile.isEmpty()) {
                 Path outputPath = Path.of(outputFile);
-                String Mode = compessionMode.getModeComboBox().getSelectionModel().getSelectedItem();
-                huffmanStats.generateStats(inputFile, outputFile, Mode);
-                fileSize.generateStats(inputFile, outputFile, Mode);
-                savedFrequency.generateStats(inputFile, outputFile, Mode);
+                String compressionMode = huffmanController.getModeComboBox().getSelectionModel().getSelectedItem();
+                huffmanStats.generateStats(inputFile, outputFile,compressionMode);
+                fileSize.generateStats(inputFile, outputFile, compressionMode);
+                savedFrequency.generateStats(inputFile, outputFile, compressionMode);
                 if (Files.isRegularFile(outputPath)) {
                     huffmanController.getInputFileSize().setText("Wielkość pliku wejściowego: " + fileSize.getInputFileSize() + "B");
                     huffmanController.getOutputFileSize().setText("Wielkość pliku wyjściowego: " + fileSize.getOutputFileSize() + "B");

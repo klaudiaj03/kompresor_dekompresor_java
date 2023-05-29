@@ -3,7 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-public class HuffmanCompressor {
+public class CompressionMode {
 
 
     public static String runC(String inputFilePath, String outputFilePath, String compressionMode) throws InterruptedException, IOException {

@@ -19,10 +19,10 @@ public class HuffmanController extends Application {
     private Label inputFileLabel, outputFileLabel, compressionLabel, resultLabel, statsLabel, inputFileSize, outputFileSize, frequencyOf0, frequencyOf1, frequencyOfAll, treeFileSize;
     private StackPane stackPane1, stackPane2, stackPane3, stackPane4;
     private TextField inputField;
+    private ComboBox<String> modeComboBox;
     private GridPane root;
     private Pane treeView;
     private Stage primaryStage;
-    CompessionMode compessionMode= new CompessionMode();
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,7 +42,10 @@ public class HuffmanController extends Application {
 
         compressButton = new Button("Kompresuj");
         compressionLabel = new Label("Tryb:");
-        compessionMode.selectCompressionMode();
+        String[] Modes = {"huffman", "huffman v2"};
+        modeComboBox = new ComboBox<>();
+        modeComboBox.getItems().addAll(Modes);
+        modeComboBox.getSelectionModel().selectFirst();
         resultLabel = new Label();
 
         decompressButton = new Button("Dekompresuj");
@@ -93,7 +96,7 @@ public class HuffmanController extends Application {
         innerGridPane1.add(outputField, 1, 1);
         innerGridPane1.add(outputFileButton, 2, 1);
         innerGridPane1.add(compressionLabel, 0, 2);
-        innerGridPane1.add(compessionMode.getModeComboBox(), 0, 3);
+        innerGridPane1.add(modeComboBox, 0, 3);
         innerGridPane1.add(compressButton, 0, 4);
         innerGridPane1.add(decompressButton, 1, 4);
         innerGridPane1.add(treeButton, 0, 5);
@@ -187,7 +190,7 @@ public class HuffmanController extends Application {
         statsButton.setPrefSize(150, 50);
         treeButton.setPrefSize(150, 50);
         saveImageButton.setPrefSize(120, 60);
-        compessionMode.getModeComboBox().setPrefSize(120, 10);
+        modeComboBox.setPrefSize(120, 10);
         decompressButton.setTextFill(Color.RED);
         decompressButton.setFont(Font.font("Arial Black", 12));
         compressButton.setTextFill(Color.GREEN);
@@ -302,5 +305,9 @@ public class HuffmanController extends Application {
 
     public Label getFrequencyOf1() {
         return frequencyOf1;
+    }
+
+    public ComboBox<String> getModeComboBox() {
+        return modeComboBox;
     }
 }
