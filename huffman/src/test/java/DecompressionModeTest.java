@@ -13,7 +13,7 @@ public class DecompressionModeTest {
     public void testRunD_withInvalidInputFileExtension_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/test2.txt";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String decompressionMode = "huffman";
 
         // Act
@@ -28,7 +28,7 @@ public class DecompressionModeTest {
     public void testRunD_withInvalidOutputFileExtension_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/test2.bin";
-        String outputFilePath = "testFiles/output.bin";
+        String outputFilePath = "testFiles/result.bin";
         String decompressionMode = "huffman";
 
         // Act
@@ -43,7 +43,7 @@ public class DecompressionModeTest {
     public void testRunD_withNonExistingInputFile_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/non_existing.bin";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String decompressionMode = "huffman";
 
         // Act
@@ -58,7 +58,7 @@ public class DecompressionModeTest {
     public void testRunD_withMissingTreeFileInHuffmanMode_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/test2.bin";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String decompressionMode = "huffman";
 
         String filePath = "tree.txt";
@@ -78,7 +78,7 @@ public class DecompressionModeTest {
     public void testRunD_withMissingTreeFileInHuffmanV2Mode_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/test2.bin";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String decompressionMode = "huffman v2";
 
         // Act
@@ -93,7 +93,7 @@ public class DecompressionModeTest {
     public void testRunD_withUnknownDecompressionMode_returnsErrorMessage() throws IOException, InterruptedException {
         // Arrange
         String inputFilePath = "testFiles/test2.bin";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String decompressionMode = "unknown";
 
         // Act

@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 
-public class HuffmanController extends Application {
+public class HuffmanController{
 
     private TextField outputField;
     private Button compressButton, decompressButton, treeButton, statsButton, inputFileButton, outputFileButton, saveImageButton;
@@ -24,7 +24,6 @@ public class HuffmanController extends Application {
     private Pane treeView;
     private Stage primaryStage;
 
-    @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
@@ -231,9 +230,6 @@ public class HuffmanController extends Application {
         return stackPane;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     public Label getResultLabel() {
         return resultLabel;

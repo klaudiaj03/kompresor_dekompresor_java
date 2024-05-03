@@ -12,7 +12,7 @@ public class CompressionModeTest {
     public void testRunC_withValidInputFileAndOutputFile_returnsOutput() throws InterruptedException, IOException {
         // Arrange
         String inputFilePath = "testFiles/test2.txt";
-        String outputFilePath = "testFiles/output2.bin";
+        String outputFilePath = "testFiles/test2.bin";
         String compressionMode = "huffman";
 
         // Act
@@ -20,7 +20,7 @@ public class CompressionModeTest {
 
         // Assert
         Assertions.assertNotNull(result);
-        Assertions.assertNotEquals("", result);
+        Assertions.assertNotEquals("Kompresja zakończona powodzeniem.", result);
         String filePath = "tree.txt";
         Path path = Paths.get(filePath);
         Files.delete(path);
@@ -30,7 +30,7 @@ public class CompressionModeTest {
     public void testRunC_withInvalidInputFileExtension_returnsErrorMessage() throws InterruptedException, IOException {
         // Arrange
         String inputFilePath = "testFiles/input.csv";
-        String outputFilePath = "testFiles/output.bin";
+        String outputFilePath = "testFiles/result.bin";
         String compressionMode = "huffman";
 
         // Act
@@ -45,7 +45,7 @@ public class CompressionModeTest {
     public void testRunC_withInvalidOutputFileExtension_returnsErrorMessage() throws InterruptedException, IOException {
         // Arrange
         String inputFilePath = "testFiles/test2.txt";
-        String outputFilePath = "testFiles/output.txt";
+        String outputFilePath = "testFiles/result.txt";
         String compressionMode = "huffman";
 
         // Act
@@ -60,7 +60,7 @@ public class CompressionModeTest {
     public void testRunC_withNonExistingInputFile_returnsErrorMessage() throws InterruptedException, IOException {
         // Arrange
         String inputFilePath = "testFiles/non_existing.txt";
-        String outputFilePath = "testFiles/output.bin";
+        String outputFilePath = "testFiles/result.bin";
         String compressionMode = "huffman";
 
         // Act
@@ -75,7 +75,7 @@ public class CompressionModeTest {
     public void testRunC_withUnknownCompressionMode_returnsErrorMessage() throws InterruptedException, IOException {
         // Arrange
         String inputFilePath = "testFiles/test2.txt";
-        String outputFilePath = "testFiles/output.bin";
+        String outputFilePath = "testFiles/result.bin";
         String compressionMode = "unknown";
 
         // Act
